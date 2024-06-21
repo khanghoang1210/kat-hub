@@ -2,20 +2,22 @@ package server
 
 import (
 	"fmt"
+	"kathub/internal/controllers"
+	"kathub/internal/database"
+	"kathub/pkg/repository"
+	"kathub/pkg/services"
 	"net/http"
 	"os"
 	"strconv"
 	"time"
 
 	_ "github.com/joho/godotenv/autoload"
-
-	"kathub/internal/database"
 )
 
 type Server struct {
 	port int
 
-	db database.Service
+	//db database.DatabaseConnection
 }
 
 func NewServer() *http.Server {
@@ -23,13 +25,21 @@ func NewServer() *http.Server {
 	NewServer := &Server{
 		port: port,
 
-		db: database.New(),
+		//db: database.New(),
 	}
+	db,_ := database.DatabaseConnection()
+	fmt.Println(db.Name())
 
+	userRepository:=repository.NewUsersRepositoryImpl(db)
+
+	userService := services.NewUsersServiceImpl(userRepository)
+
+	userController := controllers.NewTagsController(userService)
+	routes := NewRoute(userController)
 	// Declare Server config
 	server := &http.Server{
 		Addr:         fmt.Sprintf(":%d", NewServer.port),
-		Handler:      NewServer.RegisterRoutes(),
+		Handler:      routes,
 		IdleTimeout:  time.Minute,
 		ReadTimeout:  10 * time.Second,
 		WriteTimeout: 30 * time.Second,
