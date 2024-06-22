@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"kathub/pkg/services"
-	"net/http"
+	"kathub/internal/services"
+	"kathub/pkg/response"
 
 	"github.com/gin-gonic/gin"
 )
@@ -12,7 +12,7 @@ type UserController struct {
 }
 
 
-func NewTagsController(service services.UserService) *UserController {
+func NewUserController(service services.UserService) *UserController {
 	return &UserController{
 		userService: service,
 	}
@@ -21,5 +21,5 @@ func NewTagsController(service services.UserService) *UserController {
 func (u UserController)GetAll(ctx *gin.Context){
 	userResponse := u.userService.GetAll()
 
-	ctx.JSON(http.StatusOK, userResponse) 
+	response.SuccessResponse(ctx,200, userResponse)
 }

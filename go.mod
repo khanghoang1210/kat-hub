@@ -4,12 +4,13 @@ go 1.21.6
 
 require (
 	github.com/gin-gonic/gin v1.10.0
-	github.com/jackc/pgx/v5 v5.6.0
 	github.com/joho/godotenv v1.5.1
 )
 
 require (
 	github.com/gofrs/uuid v4.4.0+incompatible // indirect
+	github.com/jackc/pgx/v5 v5.6.0 // indirect
+	github.com/lib/pq v1.10.9 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 )
 
@@ -50,5 +51,5 @@ require (
 	google.golang.org/protobuf v1.34.2 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	gorm.io/driver/postgres v1.5.9
-	gorm.io/gorm v1.25.10 // indirect
+	gorm.io/gorm v1.25.10
 )

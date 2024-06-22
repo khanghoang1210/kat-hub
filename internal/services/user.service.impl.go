@@ -2,7 +2,7 @@ package services
 
 import (
 	"kathub/internal/models"
-	"kathub/pkg/repository"
+	"kathub/internal/repository"
 
 )
 
@@ -19,8 +19,8 @@ func NewUsersServiceImpl(repository repository.UserRepository) UserService {
 func (u UserServiceImpl)GetAll() []models.User{
 	result:=u.userRepository.GetAll()
 	var users []models.User
-	for _,value := range result{
-		users = append(users, value)
-	}
+
+	users = append(users, result...)
+	
 	return users	
 }
