@@ -1,3 +1,4 @@
+import Image from "next/image";
 import React, { useRef } from "react";
 
 type TopbarProps = {};
@@ -7,11 +8,15 @@ const Topbar: React.FC<TopbarProps> = () => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   return (
-    <nav className="relative flex h-[50px] w-full shrink-0 items-center px-5 bg-dark-layer-1 text-dark-gray-7">
-      <div className="relative w-1/2 mx-auto mt-10">
+    <nav className="relative bg-white-900 flex h-[70px] w-full items-center px-7 text-dark-gray-7">
+      <div className="relative mx-2">
+        <Image src={"/Logomark.svg"} alt="Logo" height={40} width={40}/>
+        <p className="text-black-900 absolute top-1/4 left-12 font-bold font-manrope">Kathub</p>
+      </div>
+      <div className="relative w-1/2 mx-auto">
         <svg
           ref={svgRef}
-          className="absolute top-1/2 left-4 transform -translate-y-1/2 pointer-events-none transition-opacity duration-0 ease-in-out"
+          className="absolute top-1/2 stroke-black-500 left-4 transform -translate-y-1/2 pointer-events-none transition-opacity duration-0 ease-in-out"
           width="17"
           height="17"
           viewBox="0 0 20 20"
@@ -36,26 +41,30 @@ const Topbar: React.FC<TopbarProps> = () => {
 
         <input
           ref={inputRef}
-          className="border-2 border-blue-100 sm:text-sm rounded-md w-full h-9 text-black pl-10 pr-4 transition-all duration-300 ease-in-out focus:border-blue-300 outline-none hover:border-blue-300 "
+          className="border-2 border-white-400 sm:text-sm rounded-md w-full h-9 text-black-400 pl-10 pr-4 transition-all duration-300 ease-in-out focus:border-blue-300 outline-none hover:border-blue-300 "
           type="text"
           placeholder="Search"
           onFocus={() => {
             if (svgRef.current) {
-              svgRef.current.style.opacity = '0';
+              svgRef.current.style.opacity = "0";
             }
             if (inputRef.current) {
-              inputRef.current.style.paddingLeft = '0.75rem';
+              inputRef.current.style.paddingLeft = "0.75rem";
             }
           }}
           onBlur={() => {
             if (svgRef.current) {
-              svgRef.current.style.opacity = '1';
+              svgRef.current.style.opacity = "1";
             }
             if (inputRef.current) {
-              inputRef.current.style.paddingLeft = '2.5rem';
+              inputRef.current.style.paddingLeft = "2.5rem";
             }
           }}
         />
+      </div>
+      <div className="relative mx-8 mr-36">
+        <p className="text-black-800 font-medium">Log out</p>
+        <Image src={"assets/icons/user.svg"} alt="Logo" height={20} width={20} className="absolute  top-0.5 left-16"/>
       </div>
     </nav>
   );

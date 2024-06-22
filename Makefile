@@ -13,6 +13,10 @@ build:
 run:
 	@go run cmd/server/main.go
 
+# Run web
+web-run:
+	@cd web && npm run dev
+
 # Create DB container
 docker-run:
 	@if docker compose up 2>/dev/null; then \
