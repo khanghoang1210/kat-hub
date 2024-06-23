@@ -14,12 +14,20 @@ func NewUsersRepositoryImpl(Db *gorm.DB) UserRepository {
 	return &UserRepositoryImpl{db: Db}
 }
 
-func(u *UserRepositoryImpl) GetAll() []models.User{
+func(u *UserRepositoryImpl) GetAll() ([]models.User, error){
 	var users []models.User
 	resp :=u.db.Find(&users)
 	if resp.Error != nil{
-		return nil
+		return nil, resp.Error
 	}
 
-	return users
+	return users,nil
+}
+
+func(u *UserRepositoryImpl)Create(user *models.User) (bool, error){
+	result := u.db.Create(user)
+	if result.Error != nil {
+		return false, result.Error
+	}
+	return true, nil
 }

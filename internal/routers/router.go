@@ -12,6 +12,7 @@ func NewRouter(userController *controllers.UserController) *gin.Engine{
 	v1:=r.Group("/api/v1/users")
 	{
 		v1.GET("", userController.GetAll)
+		v1.POST("", userController.Create)
 	}
 	return r
 }

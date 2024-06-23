@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"kathub/internal/controllers"
 	"kathub/internal/database"
 	"kathub/internal/repository"
@@ -9,12 +10,18 @@ import (
 )
 
 func main() {
-	db,_ := database.DatabaseConnection()
+	//init db
+	db, err := database.DatabaseConnection()
+	fmt.Println(db.Name())
+	if err != nil {
+		panic(err)
+	}
 
+	// initial user instances
 	userRepo := repository.NewUsersRepositoryImpl(db)
 	userService := services.NewUsersServiceImpl(userRepo)
 	userController := controllers.NewUserController(userService)
 
-	r:=routers.NewRouter(userController)
+	r := routers.NewRouter(userController)
 	r.Run()
 }

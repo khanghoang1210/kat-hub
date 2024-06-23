@@ -4,21 +4,25 @@ import (
 	"errors"
 	"fmt"
 	"kathub/internal/models"
+	"os"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	_ "github.com/jackc/pgx/v5/stdlib"
+	_ "github.com/joho/godotenv/autoload"
 )
 
-const (
-	host     = "aws-0-ap-southeast-1.pooler.supabase.com"
-	port     = 6543
-	user     = "postgres.urevhrzshuvxvvkuduco"
-	password = "kathub12102003"
-	dbName   = "postgres"
+
+var (
+	host     = os.Getenv("DB_HOST")
+	port     = os.Getenv("DB_PORT")
+	user     = os.Getenv("DB_USERNAME")
+	password = os.Getenv("DB_PASSWORD")
+	dbName   = os.Getenv("DB_DATABASE")
 )
 
 func DatabaseConnection() (*gorm.DB, error) {
-	sqlInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbName)
+	sqlInfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbName)
 
 	db, err := gorm.Open(postgres.Open(sqlInfo), &gorm.Config{})
 	if err != nil {
