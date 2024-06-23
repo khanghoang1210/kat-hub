@@ -13,6 +13,9 @@ build:
 run:
 	@go run cmd/server/main.go
 
+migration-run:
+	@go run internal/migration/migration.go
+
 # Run web
 web-run:
 	@cd web && npm run dev
