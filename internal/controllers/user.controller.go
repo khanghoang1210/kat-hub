@@ -20,6 +20,13 @@ func NewUserController(service services.UserService) *UserController {
 	}
 }
 
+// GetAll		godoc
+// @Summary			Get All Users
+// @Description		Get All Users			
+// @Produce			application/json
+// @Tags			users
+
+// @Router			/users [get]
 func (u UserController)GetAll(ctx *gin.Context){
 	userResponse, err := u.userService.GetAll()
 	if err!=nil {
@@ -29,6 +36,14 @@ func (u UserController)GetAll(ctx *gin.Context){
 	response.SuccessResponse(ctx,200, userResponse)
 }
 
+// Create		godoc
+// @Summary			Create Users
+// @Description		Create Users
+// @Param			users body models.User true "Create Users"
+// @Produce			application/json
+// @Tags			users
+
+// @Router			/users [post]
 func (u UserController) Create(ctx *gin.Context){
 	body:= models.User{}
 	if err:=ctx.BindJSON(&body);err!=nil{

@@ -4,15 +4,17 @@ import (
 	"kathub/internal/controllers"
 
 	"github.com/gin-gonic/gin"
+	ginSwagger "github.com/swaggo/gin-swagger"
+	swaggerFiles "github.com/swaggo/files"
 )
 
 func NewRouter(userController *controllers.UserController) *gin.Engine{
 	r := gin.Default()
 
-	v1:=r.Group("/api/v1/users")
-	{
-		v1.GET("", userController.GetAll)
-		v1.POST("", userController.Create)
-	}
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	baseRouter:=r.Group("/api")
+	userRouter := baseRouter.Group("/users")
+	userRouter.GET("", userController.GetAll)
+	userRouter.POST("", userController.Create)
 	return r
 }
