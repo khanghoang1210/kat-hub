@@ -3,7 +3,8 @@ package controllers
 import (
 	"kathub/internal/models"
 	"kathub/internal/services"
-	"kathub/pkg/response"
+	"kathub/pkg/requests"
+	"kathub/pkg/responses"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -13,7 +14,6 @@ type UserController struct {
 	userService services.UserService
 }
 
-
 func NewUserController(service services.UserService) *UserController {
 	return &UserController{
 		userService: service,
@@ -22,39 +22,41 @@ func NewUserController(service services.UserService) *UserController {
 
 // GetAll		godoc
 // @Summary			Get All Users
-// @Description		Get All Users			
+// @Description		Get All Users
 // @Produce			application/json
 // @Tags			users
-
+// @Success      	200  {object} response.ResponseData{data=models.User}
 // @Router			/users [get]
-func (u UserController)GetAll(ctx *gin.Context){
-	userResponse, err := u.userService.GetAll()
-	if err!=nil {
-		response.ErrorResponse(ctx, 500, err.Error())
-	}
-
-	response.SuccessResponse(ctx,200, userResponse)
+func (u UserController) GetAll(ctx *gin.Context) {
+	userResponse := u.userService.GetAll()
+	ctx.JSON(http.StatusOK, userResponse)
 }
 
-// Create		godoc
+// Create		 	godoc
 // @Summary			Create Users
 // @Description		Create Users
-// @Param			users body models.User true "Create Users"
+// @Param			body body requests.CreateUserReq true "Users"
 // @Produce			application/json
 // @Tags			users
-
+// @Success      	200  {object}  response.ResponseData{data=bool}
 // @Router			/users [post]
-func (u UserController) Create(ctx *gin.Context){
-	body:= models.User{}
-	if err:=ctx.BindJSON(&body);err!=nil{
-		ctx.AbortWithError(http.StatusBadRequest,err)
+func (u UserController) Create(ctx *gin.Context) {
+	body := requests.CreateUserReq{}
+	if err := ctx.BindJSON(&body); err != nil {
+		ctx.JSON(http.StatusBadRequest, response.ResponseData{
+			StatusCode: 400,
+			Message: err.Error(),
+			Data: false,
+		})
 		return
-	 }
-	//user := models.User{}
-	result, err := u.userService.Create(&body)
-	if err!=nil{
-		response.ErrorResponse(ctx, 500, err.Error())
 	}
-	response.SuccessResponse(ctx,200,result)
+	user := models.User{
+		UserName: body.UserName,
+		FullName: body.FullName,
+		Email: body.Email,
+		Password: body.Password,
+	}
+	result := u.userService.Create(&user)
+	ctx.JSON(http.StatusOK, result)
 
 }

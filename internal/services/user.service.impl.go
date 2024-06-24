@@ -3,7 +3,7 @@ package services
 import (
 	"kathub/internal/models"
 	"kathub/internal/repository"
-
+	response "kathub/pkg/responses"
 )
 
 type UserServiceImpl struct {
@@ -16,22 +16,38 @@ func NewUsersServiceImpl(repository repository.UserRepository) UserService {
 	}
 }
 
-func (u UserServiceImpl)GetAll() ([]models.User, error){
+func (u UserServiceImpl)GetAll() *response.ResponseData{
 	result, err:=u.userRepository.GetAll()
 	if err!=nil {
-		return nil, err
+		return &response.ResponseData{
+			StatusCode: 500,
+			Message: err.Error(),
+			Data: nil,
+		}
 	}
 	var users []models.User
 
 	users = append(users, result...)
 	
-	return users, nil	
+	return &response.ResponseData{
+		StatusCode: 200,
+		Message: "Success",
+		Data: users,
+	}
 }
-func (u UserServiceImpl)Create(user *models.User) (bool, error){
+func (u UserServiceImpl)Create(user *models.User) *response.ResponseData{
 	result, err := u.userRepository.Create(user)
 	if err!=nil {
-		return false, err
+		return &response.ResponseData{
+			StatusCode: 500,
+			Message: err.Error(),
+			Data: nil,
+		}
 	}
-	return result, nil
+	return &response.ResponseData{
+		StatusCode: 200,
+		Message: "Success",
+		Data: result,
+	}
 	
 }

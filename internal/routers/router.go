@@ -12,7 +12,7 @@ func NewRouter(userController *controllers.UserController) *gin.Engine{
 	r := gin.Default()
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	baseRouter:=r.Group("/api")
+	baseRouter:=r.Group("/api/v1")
 	userRouter := baseRouter.Group("/users")
 	userRouter.GET("", userController.GetAll)
 	userRouter.POST("", userController.Create)

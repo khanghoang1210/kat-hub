@@ -13,7 +13,9 @@ import (
 func DatabaseConnection() (*gorm.DB, error) {
 	sqlInfo := os.Getenv("CONN_STRING")
 
-	db, err := gorm.Open(postgres.Open(sqlInfo), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(sqlInfo), &gorm.Config{
+		PrepareStmt: false,
+	})
 	if err != nil {
 		panic(err)
 	}

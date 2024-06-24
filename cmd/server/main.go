@@ -2,20 +2,20 @@ package main
 
 import (
 	"fmt"
+	_ "kathub/docs"
 	"kathub/internal/controllers"
 	"kathub/internal/database"
 	"kathub/internal/repository"
 	"kathub/internal/routers"
 	"kathub/internal/services"
-	_"kathub/docs"
 )
 
 // @title   Kathub API
 // @version	1.0
-// @description A Tag service API in Go using Gin framework
+// @description Kathub API
 
 // @host 	localhost:8080
-// @BasePath /api
+// @BasePath /api/v1
 func main() {
 	//init db
 	db, err := database.DatabaseConnection()

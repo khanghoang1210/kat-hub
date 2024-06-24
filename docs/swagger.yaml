@@ -1,14 +1,100 @@
-basePath: /api
+basePath: /api/v1
+definitions:
+  models.User:
+    properties:
+      avatarUrl:
+        type: string
+      createdAt:
+        type: string
+      email:
+        type: string
+      fullName:
+        type: string
+      gender:
+        type: string
+      id:
+        type: integer
+      password:
+        type: string
+      updatedAt:
+        type: string
+      userName:
+        type: string
+    type: object
+  requests.CreateUserReq:
+    properties:
+      confirmPassword:
+        type: string
+      email:
+        type: string
+      fullName:
+        type: string
+      password:
+        type: string
+      userName:
+        type: string
+    required:
+    - confirmPassword
+    - email
+    - fullName
+    - password
+    - userName
+    type: object
+  response.ResponseData:
+    properties:
+      data: {}
+      message:
+        type: string
+      statusCode:
+        type: integer
+    type: object
 host: localhost:8080
 info:
   contact: {}
-  description: A Tag service API in Go using Gin framework
+  description: Kathub API
   title: Kathub API
   version: "1.0"
 paths:
   /users:
     get:
-      responses: {}
+      description: Get All Users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.ResponseData'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.User'
+              type: object
+      summary: Get All Users
+      tags:
+      - users
     post:
-      responses: {}
+      description: Create Users
+      parameters:
+      - description: Users
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/requests.CreateUserReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.ResponseData'
+            - properties:
+                data:
+                  type: boolean
+              type: object
+      summary: Create Users
+      tags:
+      - users
 swagger: "2.0"
