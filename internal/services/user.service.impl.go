@@ -1,9 +1,11 @@
 package services
 
 import (
-	"kathub/internal/models"
 	"kathub/internal/repository"
+	"kathub/pkg/requests"
 	response "kathub/pkg/responses"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 type UserServiceImpl struct {
@@ -42,12 +44,24 @@ func (u UserServiceImpl)GetAll()  (*response.ResponseData, error){
 
 	return response, nil
 }
-func (u UserServiceImpl)Create(user *models.User)  (*response.ResponseData, error){
-	result, err := u.userRepository.Create(user)
+func (u UserServiceImpl)Create(user *requests.CreateUserReq)  (*response.ResponseData, error){
 	response := &response.ResponseData{}
+
+	passwordHash, err := bcrypt.GenerateFromPassword([]byte(user.Password),10) 
+	if err!=nil{
+		response.StatusCode = 500
+		response.Message = "Fail to hash password"
+		response.Data = false
+		return response, err
+	}
+	user.Password = string(passwordHash)
+
+	result, err := u.userRepository.Create(user)
+
+
 	if err!=nil {
 		response.StatusCode = 500
-		response.Message = "Fail"
+		response.Message = "Internal Error"
 		response.Data = false
 		return response, err
 	}

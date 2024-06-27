@@ -2,7 +2,7 @@ package repository
 
 import (
 	"kathub/internal/models"
-
+	"kathub/pkg/requests"
 	"gorm.io/gorm"
 )
 
@@ -24,7 +24,9 @@ func(u *UserRepositoryImpl) GetAll() ([]models.User, error){
 	return users,nil
 }
 
-func(u *UserRepositoryImpl)Create(user *models.User) (bool, error){
+func(u *UserRepositoryImpl)Create(user *requests.CreateUserReq) (bool, error){
+
+
 	result := u.db.Create(user)
 	if result.Error != nil {
 		return false, result.Error

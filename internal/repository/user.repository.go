@@ -1,8 +1,11 @@
 package repository
 
-import "kathub/internal/models"
+import (
+	"kathub/internal/models"
+	"kathub/pkg/requests"
+)
 
 type UserRepository interface {
 	GetAll()([]models.User, error)
-	Create(user *models.User) (bool,error)
+	Create(user *requests.CreateUserReq) (bool,error)
 }

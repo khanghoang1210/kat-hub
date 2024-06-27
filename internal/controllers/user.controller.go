@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"kathub/internal/models"
 	"kathub/internal/services"
 	"kathub/pkg/requests"
 	"kathub/pkg/responses"
@@ -40,18 +39,13 @@ func (u UserController) GetAll(ctx *gin.Context) {
 // @Success      	200 {object}  responses.ResponseData
 // @Router			/users [post]
 func (u UserController) Create(ctx *gin.Context) {
-	body := requests.CreateUserReq{}
-	if err := ctx.ShouldBindJSON(&body); err != nil {
+	newUser := requests.CreateUserReq{}
+	if err := ctx.ShouldBindJSON(&newUser); err != nil {
 		responses.APIResponse(ctx,400,"Bad request",nil)
 		return
 	}
-	user := models.User{
-		UserName: body.UserName,
-		FullName: body.FullName,
-		Email: body.Email,
-		Password: body.Password,
-	}
-	result, _ := u.userService.Create(&user)
+	
+	result, _ := u.userService.Create(&newUser)
 	responses.APIResponse(ctx, result.StatusCode, result.Message, result.Data)
 
 }
