@@ -15,7 +15,7 @@ func main() {
 	}
 	//db.Debug().AutoMigrate(&models.User{});
 	 // Auto migrate the User struct to add new columns
-	 if err := db.Debug().AutoMigrate(&models.User{}); err != nil {
+	 if err := db.Debug().AutoMigrate(&models.User{}, &models.Post{}); err != nil {
         fmt.Printf("failed to auto migrate: %v", err)
     }
 }

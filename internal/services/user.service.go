@@ -6,6 +6,6 @@ import (
 )
 
 type UserService interface {
-	GetAll() *response.ResponseData
-	Create(user *models.User) *response.ResponseData
+	GetAll() (*response.ResponseData, error)
+	Create(user *models.User) (*response.ResponseData, error)
 }

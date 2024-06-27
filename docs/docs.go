@@ -29,19 +29,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/response.ResponseData"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/models.User"
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/responses.ResponseData"
                         }
                     }
                 }
@@ -70,19 +58,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/response.ResponseData"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "boolean"
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/responses.ResponseData"
                         }
                     }
                 }
@@ -90,38 +66,6 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "models.User": {
-            "type": "object",
-            "properties": {
-                "avatarUrl": {
-                    "type": "string"
-                },
-                "createdAt": {
-                    "type": "string"
-                },
-                "email": {
-                    "type": "string"
-                },
-                "fullName": {
-                    "type": "string"
-                },
-                "gender": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "password": {
-                    "type": "string"
-                },
-                "updatedAt": {
-                    "type": "string"
-                },
-                "userName": {
-                    "type": "string"
-                }
-            }
-        },
         "requests.CreateUserReq": {
             "type": "object",
             "required": [
@@ -149,7 +93,7 @@ const docTemplate = `{
                 }
             }
         },
-        "response.ResponseData": {
+        "responses.ResponseData": {
             "type": "object",
             "properties": {
                 "data": {},

@@ -1,4 +1,4 @@
-package response
+package responses
 
 import (
 	"net/http"
@@ -24,6 +24,13 @@ func ErrorResponse(c *gin.Context, code int, message string){
 	c.JSON(http.StatusOK, ResponseData{
 		StatusCode: code,
 		Message: message,
+		Data: nil,
+	})
+}
+func APIResponse(c *gin.Context, code int, msg string, data interface{}){
+	c.JSON(code, ResponseData{
+		StatusCode: code,
+		Message: msg,
 		Data: nil,
 	})
 }

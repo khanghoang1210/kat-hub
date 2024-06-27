@@ -5,7 +5,6 @@ import (
 	"kathub/internal/services"
 	"kathub/pkg/requests"
 	"kathub/pkg/responses"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
@@ -25,11 +24,11 @@ func NewUserController(service services.UserService) *UserController {
 // @Description		Get All Users
 // @Produce			application/json
 // @Tags			users
-// @Success      	200  {object} response.ResponseData{data=models.User}
+// @Success      	200 {object} responses.ResponseData
 // @Router			/users [get]
 func (u UserController) GetAll(ctx *gin.Context) {
-	userResponse := u.userService.GetAll()
-	ctx.JSON(http.StatusOK, userResponse)
+	result, _ := u.userService.GetAll()
+	responses.APIResponse(ctx,result.StatusCode, result.Message, result.Data)
 }
 
 // Create		 	godoc
@@ -38,16 +37,12 @@ func (u UserController) GetAll(ctx *gin.Context) {
 // @Param			body body requests.CreateUserReq true "Users"
 // @Produce			application/json
 // @Tags			users
-// @Success      	200  {object}  response.ResponseData{data=bool}
+// @Success      	200 {object}  responses.ResponseData
 // @Router			/users [post]
 func (u UserController) Create(ctx *gin.Context) {
 	body := requests.CreateUserReq{}
-	if err := ctx.BindJSON(&body); err != nil {
-		ctx.JSON(http.StatusBadRequest, response.ResponseData{
-			StatusCode: 400,
-			Message: err.Error(),
-			Data: false,
-		})
+	if err := ctx.ShouldBindJSON(&body); err != nil {
+		responses.APIResponse(ctx,400,"Bad request",nil)
 		return
 	}
 	user := models.User{
@@ -56,7 +51,7 @@ func (u UserController) Create(ctx *gin.Context) {
 		Email: body.Email,
 		Password: body.Password,
 	}
-	result := u.userService.Create(&user)
-	ctx.JSON(http.StatusOK, result)
+	result, _ := u.userService.Create(&user)
+	responses.APIResponse(ctx, result.StatusCode, result.Message, result.Data)
 
 }

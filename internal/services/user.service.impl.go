@@ -16,38 +16,44 @@ func NewUsersServiceImpl(repository repository.UserRepository) UserService {
 	}
 }
 
-func (u UserServiceImpl)GetAll() *response.ResponseData{
+func (u UserServiceImpl)GetAll()  (*response.ResponseData, error){
 	result, err:=u.userRepository.GetAll()
 	if err!=nil {
-		return &response.ResponseData{
-			StatusCode: 500,
-			Message: err.Error(),
-			Data: nil,
-		}
+		return nil, err
 	}
-	var users []models.User
+	var users []*response.UserResponse
 
-	users = append(users, result...)
-	
-	return &response.ResponseData{
+	for _,v:=range result{
+		user := &response.UserResponse{
+			Id: v.Id,
+			FullName: v.FullName,
+			UserName: v.UserName,
+			Email: v.Email,
+			AvatarUrl: v.AvatarUrl,
+			CreatedAt: v.CreatedAt,
+		}
+		users = append(users, user)
+	}
+	response := &response.ResponseData{
 		StatusCode: 200,
 		Message: "Success",
 		Data: users,
 	}
+
+	return response, nil
 }
-func (u UserServiceImpl)Create(user *models.User) *response.ResponseData{
+func (u UserServiceImpl)Create(user *models.User)  (*response.ResponseData, error){
 	result, err := u.userRepository.Create(user)
+	response := &response.ResponseData{}
 	if err!=nil {
-		return &response.ResponseData{
-			StatusCode: 500,
-			Message: err.Error(),
-			Data: nil,
-		}
+		response.StatusCode = 500
+		response.Message = "Fail"
+		response.Data = false
+		return response, err
 	}
-	return &response.ResponseData{
-		StatusCode: 200,
-		Message: "Success",
-		Data: result,
-	}
+	response.StatusCode = 200
+	response.Message = "Success"
+	response.Data = result
+	return response, nil
 	
 }

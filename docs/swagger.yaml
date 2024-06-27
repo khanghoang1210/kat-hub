@@ -1,26 +1,5 @@
 basePath: /api/v1
 definitions:
-  models.User:
-    properties:
-      avatarUrl:
-        type: string
-      createdAt:
-        type: string
-      email:
-        type: string
-      fullName:
-        type: string
-      gender:
-        type: string
-      id:
-        type: integer
-      password:
-        type: string
-      updatedAt:
-        type: string
-      userName:
-        type: string
-    type: object
   requests.CreateUserReq:
     properties:
       confirmPassword:
@@ -40,7 +19,7 @@ definitions:
     - password
     - userName
     type: object
-  response.ResponseData:
+  responses.ResponseData:
     properties:
       data: {}
       message:
@@ -64,12 +43,7 @@ paths:
         "200":
           description: OK
           schema:
-            allOf:
-            - $ref: '#/definitions/response.ResponseData'
-            - properties:
-                data:
-                  $ref: '#/definitions/models.User'
-              type: object
+            $ref: '#/definitions/responses.ResponseData'
       summary: Get All Users
       tags:
       - users
@@ -88,12 +62,7 @@ paths:
         "200":
           description: OK
           schema:
-            allOf:
-            - $ref: '#/definitions/response.ResponseData'
-            - properties:
-                data:
-                  type: boolean
-              type: object
+            $ref: '#/definitions/responses.ResponseData'
       summary: Create Users
       tags:
       - users

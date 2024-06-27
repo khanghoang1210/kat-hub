@@ -14,4 +14,5 @@ type User struct {
 	Gender    string
 	CreatedAt time.Time
 	UpdatedAt time.Time
+	Post      Post
 }
