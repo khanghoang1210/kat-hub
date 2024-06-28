@@ -19,14 +19,15 @@ func NewAccountRepositoryImpl(Db *gorm.DB) AccountRepository {
 
 func (ar *AccountRepositoryImpl) Login(loginReq *requests.LoginReq) (*models.User, error) {
 	user := &models.User{}
-	result := ar.db.Where("user_name = ?",loginReq.UserName).First(&user)
-
-	if result.Error !=  nil{
-		return nil, result.Error
-	}
-	if  user == nil {
+	result := ar.db.Where("user_name = ?", loginReq.UserName).First(&user)
+	
+	if result.RowsAffected == 0 {
 		return nil, errors.New(responses.StatusUserNotFound)
 	}
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
 	return user, nil
-	
+
 }
