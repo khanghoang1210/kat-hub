@@ -26,7 +26,7 @@ func NewUserController(service services.UserService) *UserController {
 // @Success      	200 {object} responses.ResponseData
 // @Router			/users [get]
 func (u UserController) GetAll(ctx *gin.Context) {
-	result, _ := u.userService.GetAll()
+	result := u.userService.GetAll()
 	responses.APIResponse(ctx,result.StatusCode, result.Message, result.Data)
 }
 
@@ -45,7 +45,7 @@ func (u UserController) Create(ctx *gin.Context) {
 		return
 	}
 	
-	result, _ := u.userService.Create(&newUser)
+	result := u.userService.Create(&newUser)
 	responses.APIResponse(ctx, result.StatusCode, result.Message, result.Data)
 
 }

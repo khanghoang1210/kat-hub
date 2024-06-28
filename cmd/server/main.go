@@ -24,11 +24,16 @@ func main() {
 		panic(err)
 	}
 
-	// initial user instances
+	// initial user instance
 	userRepo := repository.NewUsersRepositoryImpl(db)
 	userService := services.NewUsersServiceImpl(userRepo)
 	userController := controllers.NewUserController(userService)
 
-	r := routers.NewRouter(userController)
+	// initial account instance
+	ar := repository.NewAccountRepositoryImpl(db)
+	as := services.NewAccountServiceImpl(ar)
+	ac := controllers.NewAccountController(as)
+
+	r := routers.NewRouter(userController, ac)
 	r.Run()
 }

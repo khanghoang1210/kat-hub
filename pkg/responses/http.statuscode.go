@@ -1,11 +1,12 @@
 package responses
 
 const (
-	StatusSuccess      = 200
-	StatusParamInvalid = 400
+	StatusSuccess      = "success"
+	StatusParamInvalid = "invalid param"
+	StatusUserNotFound = "user does not exists"
+	StatusUserExist = "user already exists"
+	StatusResourceNotFound = "resource not found"
+	StatusUnAuthorize = "unauthorize"
+	StatusAuthorizeFail = "invalid username or password"
 )
 
-var msg = map[int]string{
-	StatusSuccess:      "Success",
-	StatusParamInvalid: "Fail",
-}

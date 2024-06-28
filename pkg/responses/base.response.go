@@ -31,6 +31,6 @@ func APIResponse(c *gin.Context, code int, msg string, data interface{}){
 	c.JSON(code, ResponseData{
 		StatusCode: code,
 		Message: msg,
-		Data: nil,
+		Data: data,
 	})
 }

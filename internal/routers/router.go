@@ -8,7 +8,7 @@ import (
 	swaggerFiles "github.com/swaggo/files"
 )
 
-func NewRouter(userController *controllers.UserController) *gin.Engine{
+func NewRouter(userController *controllers.UserController, ac *controllers.AccountController) *gin.Engine{
 	r := gin.Default()
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
@@ -16,5 +16,8 @@ func NewRouter(userController *controllers.UserController) *gin.Engine{
 	userRouter := baseRouter.Group("/users")
 	userRouter.GET("", userController.GetAll)
 	userRouter.POST("", userController.Create)
+
+	accountRouter := baseRouter.Group("/accounts")
+	accountRouter.POST("/login", ac.Login)
 	return r
 }

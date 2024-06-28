@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"errors"
+	"kathub/internal/models"
 	"kathub/pkg/requests"
 	"kathub/pkg/responses"
 
@@ -11,10 +13,20 @@ type AccountRepositoryImpl struct {
 	db *gorm.DB
 }
 
-func AccountUserRepositoryImpl(Db *gorm.DB) AccountRepository {
+func NewAccountRepositoryImpl(Db *gorm.DB) AccountRepository {
 	return &AccountRepositoryImpl{db: Db}
 }
 
-func (ar *AccountRepositoryImpl)Login(loginReq *requests.LoginReq)(*responses.LoginRes, error){
-	return nil,nil
+func (ar *AccountRepositoryImpl) Login(loginReq *requests.LoginReq) (*models.User, error) {
+	user := &models.User{}
+	result := ar.db.Where("user_name = ?",loginReq.UserName).First(&user)
+
+	if result.Error !=  nil{
+		return nil, result.Error
+	}
+	if  user == nil {
+		return nil, errors.New(responses.StatusUserNotFound)
+	}
+	return user, nil
+	
 }

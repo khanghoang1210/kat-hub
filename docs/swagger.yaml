@@ -19,6 +19,16 @@ definitions:
     - password
     - userName
     type: object
+  requests.LoginReq:
+    properties:
+      password:
+        type: string
+      userName:
+        type: string
+    required:
+    - password
+    - userName
+    type: object
   responses.ResponseData:
     properties:
       data: {}
@@ -34,6 +44,26 @@ info:
   title: Kathub API
   version: "1.0"
 paths:
+  /accounts/login:
+    post:
+      description: Login
+      parameters:
+      - description: Accounts
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/requests.LoginReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.ResponseData'
+      summary: Login
+      tags:
+      - accounts
   /users:
     get:
       description: Get All Users
