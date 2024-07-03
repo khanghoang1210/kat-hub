@@ -8,4 +8,5 @@ import (
 type UserRepository interface {
 	GetAll()([]models.User, error)
 	Create(user *requests.CreateUserReq) (bool,error)
+	Update(user *requests.UpdateUserReq) (bool, error)
 }

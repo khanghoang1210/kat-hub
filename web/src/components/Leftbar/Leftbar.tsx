@@ -13,13 +13,15 @@ const Leftbar: React.FC<LeftbarProps> = () => {
           className="w- h-24 object-cover"
         />
         <div className="absolute top-16 left-4">
-          <img
-            src="https://via.placeholder.com/50" // Replace with the actual avatar image source
-            alt="User Avatar"
-            className="w-16 h-16 rounded-full border-4 border-white"
-          />
+        <Image
+          src={"/assets/icons/user.svg"}
+          alt="avt"
+          width={60}
+          height={60}
+          className=" rounded-full border-2 border-black-300"
+        />
         </div>
-        <div className="mt-8 ml-4">
+        <div className="mt-10 ml-4">
           <h2 className="font-bold text-lg">Robert Fox</h2>
           <p className="text-gray-500">Software Engineer</p>
         </div>

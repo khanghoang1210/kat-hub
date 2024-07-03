@@ -49,3 +49,4 @@ func (u UserController) Create(ctx *gin.Context) {
 	responses.APIResponse(ctx, result.StatusCode, result.Message, result.Data)
 
 }
+

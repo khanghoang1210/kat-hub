@@ -78,3 +78,12 @@ func (u UserServiceImpl) Create(user *requests.CreateUserReq) *responses.Respons
 	}
 
 }
+
+func (us UserServiceImpl) Update(user *requests.UpdateUserReq) *responses.ResponseData{
+
+	return &responses.ResponseData{
+		StatusCode: http.StatusCreated,
+		Message:    responses.StatusSuccess,
+		Data:       nil,
+	}
+}
