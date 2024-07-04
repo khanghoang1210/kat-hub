@@ -46,6 +46,37 @@ const docTemplate = `{
                 }
             }
         },
+        "/posts": {
+            "post": {
+                "description": "Create Posts",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Posts"
+                ],
+                "summary": "Create Posts",
+                "parameters": [
+                    {
+                        "description": "Posts",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.CreatePostReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ResponseData"
+                        }
+                    }
+                }
+            }
+        },
         "/users": {
             "get": {
                 "description": "Get All Users",
@@ -56,6 +87,35 @@ const docTemplate = `{
                     "users"
                 ],
                 "summary": "Get All Users",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ResponseData"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update Users",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Update Users",
+                "parameters": [
+                    {
+                        "description": "Users",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.UpdateUserReq"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -97,6 +157,14 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "requests.CreatePostReq": {
+            "type": "object",
+            "properties": {
+                "textContent": {
+                    "type": "string"
+                }
+            }
+        },
         "requests.CreateUserReq": {
             "type": "object",
             "required": [
@@ -132,6 +200,26 @@ const docTemplate = `{
             ],
             "properties": {
                 "password": {
+                    "type": "string"
+                },
+                "userName": {
+                    "type": "string"
+                }
+            }
+        },
+        "requests.UpdateUserReq": {
+            "type": "object",
+            "required": [
+                "userName"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "fullName": {
+                    "type": "string"
+                },
+                "gender": {
                     "type": "string"
                 },
                 "userName": {

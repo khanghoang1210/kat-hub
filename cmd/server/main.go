@@ -33,7 +33,11 @@ func main() {
 	ar := repository.NewAccountRepositoryImpl(db)
 	as := services.NewAccountServiceImpl(ar)
 	ac := controllers.NewAccountController(as)
+	// initial account instance
+	pr := repository.NewPostRepositoryImpl(db)
+	ps := services.NewPostServiceImpl(pr)
+	pc := controllers.NewPostController(ps)
 
-	r := routers.NewRouter(userController, ac)
+	r := routers.NewRouter(userController, ac, pc)
 	r.Run()
 }

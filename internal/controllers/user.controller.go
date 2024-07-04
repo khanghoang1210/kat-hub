@@ -50,3 +50,21 @@ func (u UserController) Create(ctx *gin.Context) {
 
 }
 
+// GetAll		godoc
+// @Summary			Update Users
+// @Description		Update Users
+// @Param			body body requests.UpdateUserReq true "Users"
+// @Produce			application/json
+// @Tags			users
+// @Success      	200 {object} responses.ResponseData
+// @Router			/users [put]
+func (u UserController) Update(ctx *gin.Context) {
+	updatedUser := requests.UpdateUserReq{}
+	if err := ctx.ShouldBindJSON(&updatedUser); err != nil {
+		responses.APIResponse(ctx,400,"Bad request",nil)
+		return
+	}
+	
+	result := u.userService.Update(&updatedUser)
+	responses.APIResponse(ctx,result.StatusCode, result.Message, result.Data)
+}

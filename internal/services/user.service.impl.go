@@ -36,6 +36,7 @@ func (u UserServiceImpl) GetAll() *responses.ResponseData {
 			FullName:  v.FullName,
 			UserName:  v.UserName,
 			Email:     v.Email,
+			Gender:    v.Gender,
 			AvatarUrl: v.AvatarUrl,
 			CreatedAt: v.CreatedAt,
 		}
@@ -79,11 +80,26 @@ func (u UserServiceImpl) Create(user *requests.CreateUserReq) *responses.Respons
 
 }
 
-func (us UserServiceImpl) Update(user *requests.UpdateUserReq) *responses.ResponseData{
+func (us UserServiceImpl) Update(user *requests.UpdateUserReq) *responses.ResponseData {
 
+	userUpdated, err := us.userRepository.Update(user)
+	if err != nil {
+		if err.Error() == responses.StatusUserNotFound {
+			return &responses.ResponseData{
+				StatusCode: http.StatusNotFound,
+				Message:    err.Error(),
+				Data:       false,
+			}
+		}
+		return &responses.ResponseData{
+			StatusCode: http.StatusInternalServerError,
+			Message:    err.Error(),
+			Data:       false,
+		}
+	}
 	return &responses.ResponseData{
 		StatusCode: http.StatusCreated,
 		Message:    responses.StatusSuccess,
-		Data:       nil,
+		Data:       userUpdated,
 	}
 }

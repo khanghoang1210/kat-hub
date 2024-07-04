@@ -5,14 +5,14 @@ type LeftbarProps = {};
 
 const Leftbar: React.FC<LeftbarProps> = () => {
   return (
-    <div className="rounded-lg relative bg-white-900 w-64 h-auto p-4 mt-1 ml-8 shadow-md text-black-600">
-      <div className="relative  w-full">
+    <div className="absolute rounded-lg left-8 top-20 w-64 h-auto p-0 bg-white-900 shadow text-black-600">
+      <div className="relative  w-full ">
         <img
           src="https://via.placeholder.com/256x100" // Replace with the actual cover image source
           alt="Cover"
-          className="w- h-24 object-cover"
+          className="w-screen h-fit object-cover rounded-t-lg"
         />
-        <div className="absolute top-16 left-4">
+        <div className="absolute top-16 left-4 ">
         <Image
           src={"/assets/icons/user.svg"}
           alt="avt"
@@ -26,7 +26,7 @@ const Leftbar: React.FC<LeftbarProps> = () => {
           <p className="text-gray-500">Software Engineer</p>
         </div>
       </div>
-      <div className="mt-8 space-y-4">
+      <div className="mt-8 space-y-4 m-3">
         <button className="flex items-center space-x-2 p-1.5 w-full text-left hover:bg-gray-100 rounded">
           <Image
             src={"/assets/icons/Home.svg"}

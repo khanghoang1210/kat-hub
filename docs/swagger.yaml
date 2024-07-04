@@ -1,5 +1,10 @@
 basePath: /api/v1
 definitions:
+  requests.CreatePostReq:
+    properties:
+      textContent:
+        type: string
+    type: object
   requests.CreateUserReq:
     properties:
       confirmPassword:
@@ -27,6 +32,19 @@ definitions:
         type: string
     required:
     - password
+    - userName
+    type: object
+  requests.UpdateUserReq:
+    properties:
+      email:
+        type: string
+      fullName:
+        type: string
+      gender:
+        type: string
+      userName:
+        type: string
+    required:
     - userName
     type: object
   responses.ResponseData:
@@ -64,6 +82,26 @@ paths:
       summary: Login
       tags:
       - accounts
+  /posts:
+    post:
+      description: Create Posts
+      parameters:
+      - description: Posts
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/requests.CreatePostReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.ResponseData'
+      summary: Create Posts
+      tags:
+      - Posts
   /users:
     get:
       description: Get All Users
@@ -94,6 +132,25 @@ paths:
           schema:
             $ref: '#/definitions/responses.ResponseData'
       summary: Create Users
+      tags:
+      - users
+    put:
+      description: Update Users
+      parameters:
+      - description: Users
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/requests.UpdateUserReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.ResponseData'
+      summary: Update Users
       tags:
       - users
 swagger: "2.0"

@@ -20,7 +20,7 @@ func SuccessResponse(c *gin.Context, code int, data interface{}){
 	})
 }
 
-func ErrorResponse(c *gin.Context, code int, message string){
+func ErrorResponse(c *gin.Context, code int, message string){ 
 	c.JSON(http.StatusOK, ResponseData{
 		StatusCode: code,
 		Message: message,
