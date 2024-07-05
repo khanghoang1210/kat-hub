@@ -5,7 +5,7 @@ type StatusBarProps = {};
 
 const StatusBar: React.FC<StatusBarProps> = () => {
   return (
-    <div className=" ms-80 w-5/12 h-28  rounded-lg absolute bg-white-900 p-4 mt-1 ml-8 shadow text-black-600">
+    <div className=" left-[365px] w-5/12 h-28  rounded-lg absolute bg-white-900 p-4 mt-4 shadow text-black-600">
       <div className="flex items-center">
         <Image
           src={"/assets/icons/user.svg"}

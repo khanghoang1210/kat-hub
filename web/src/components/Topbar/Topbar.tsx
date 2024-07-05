@@ -9,11 +9,11 @@ const Topbar: React.FC<TopbarProps> = () => {
 
   return (
     <nav className="relative bg-white-900 flex h-[70px] w-full items-center px-7 text-dark-gray-7">
-      <div className="relative mx-2">
+      <div className="relative left-12">
         <Image src={"/Logomark.svg"} alt="Logo" height={40} width={40}/>
         <p className="text-black-900 absolute top-1/4 left-12 font-bold font-manrope">Kathub</p>
       </div>
-      <div className="relative w-1/2 mx-auto">
+      <div className="relative w-[620px] mx-auto ml-52">
         <svg
           ref={svgRef}
           className="absolute top-1/2 stroke-black-500 left-4 transform -translate-y-1/2 pointer-events-none transition-opacity duration-0 ease-in-out"
@@ -41,7 +41,7 @@ const Topbar: React.FC<TopbarProps> = () => {
 
         <input
           ref={inputRef}
-          className="border-2 border-white-400 sm:text-sm rounded-md w-full h-9 text-black-400 pl-10 pr-4 transition-all duration-300 ease-in-out focus:border-blue-300 outline-none hover:border-blue-300 "
+          className="border-2 border-white-400 sm:text-sm rounded-md w-full h-9 text-black-400 pl-10 transition-all duration-300 ease-in-out focus:border-blue-300 outline-none hover:border-blue-300 "
           type="text"
           placeholder="Search"
           onFocus={() => {

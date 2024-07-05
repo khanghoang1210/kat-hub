@@ -5,7 +5,7 @@ type LeftbarProps = {};
 
 const Leftbar: React.FC<LeftbarProps> = () => {
   return (
-    <div className="absolute rounded-lg left-8 top-20 w-64 h-auto p-0 bg-white-900 shadow text-black-600">
+    <div className="absolute rounded-lg left-20 top-20 w-64 h-auto p-0 mt-2 bg-white-900 shadow text-black-600">
       <div className="relative  w-full ">
         <img
           src="https://via.placeholder.com/256x100" // Replace with the actual cover image source
