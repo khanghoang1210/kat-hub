@@ -2,10 +2,11 @@ package routers
 
 import (
 	"kathub/internal/controllers"
+	"kathub/internal/middlewares"
 
 	"github.com/gin-gonic/gin"
-	ginSwagger "github.com/swaggo/gin-swagger"
 	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func NewRouter(userController *controllers.UserController, ac *controllers.AccountController, pc *controllers.PostController) *gin.Engine{
@@ -14,7 +15,7 @@ func NewRouter(userController *controllers.UserController, ac *controllers.Accou
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	baseRouter:=r.Group("/api/v1")
 	userRouter := baseRouter.Group("/users")
-	userRouter.GET("", userController.GetAll)
+	userRouter.GET("",middlewares.AuthenMiddleware, userController.GetAll)
 	userRouter.POST("", userController.Create)
 	userRouter.PUT("", userController.Update)
 
@@ -22,6 +23,6 @@ func NewRouter(userController *controllers.UserController, ac *controllers.Accou
 	accountRouter.POST("/login", ac.Login)
 
 	postRouter := baseRouter.Group("/posts")
-	postRouter.POST("", pc.Create)
+	postRouter.POST("",middlewares.AuthenMiddleware, pc.Create)
 	return r
 }
