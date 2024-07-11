@@ -30,19 +30,19 @@ func NewPostController(service services.PostService) *PostController {
 // @Router			/posts [post]
 func (pc PostController) Create(ctx *gin.Context) {
 	newPost := requests.CreatePostReq{}
-	currentUser := utils.GetUserProfile(ctx)
-	fmt.Print(currentUser)
-	if currentUser != nil {
-		fmt.Print(currentUser)
-		return
+	
+	currentUser, err := utils.GetUserProfile(ctx)
+	fmt.Print("================= ", currentUser)
+	if err != nil {
+		responses.APIResponse(ctx, 401, responses.StatusUnAuthorize, nil)
 	}
 
 	if err := ctx.ShouldBindJSON(&newPost); err != nil {
-		responses.APIResponse(ctx, 400, "Bad request", nil)
+		responses.APIResponse(ctx, 400, responses.StatusParamInvalid, nil)
 		return
 	}
 
-	result := pc.postService.Create(&newPost, 1)
+	result := pc.postService.Create(&newPost, currentUser.Id)
 	responses.APIResponse(ctx, result.StatusCode, result.Message, result.Data)
 
 }

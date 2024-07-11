@@ -1,13 +1,24 @@
 package utils
 
-import "github.com/gin-gonic/gin"
+import (
+	"errors"
+	"kathub/pkg/responses"
 
-func GetUserProfile(c *gin.Context) any {
+	"github.com/gin-gonic/gin"
+)
 
-	user, _ := c.Get("currentUser")
+func GetUserProfile(c *gin.Context) (*responses.UserResponse, error) {
 
-	c.JSON(200, gin.H{
-		"user": user,
-	})
-	return user
+	user, ok := c.Get("currentUser")
+	if !ok {
+		
+		return nil, errors.New("Unauthorized")
+	}
+
+	currentUser, ok := user.(responses.UserResponse)
+	if !ok {
+		return nil, errors.New("User type assertion failed")
+	}
+	return &currentUser, nil
+
 }

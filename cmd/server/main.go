@@ -18,23 +18,20 @@ import (
 // @BasePath /api/v1
 func main() {
 	//init db
-	db, err := database.DatabaseConnection()
-	fmt.Println(db.Name())
-	if err != nil {
-		panic(err)
-	}
+	database.DatabaseConnection()
+	fmt.Print(database.DB.Name())
 
 	// initial user instance
-	userRepo := repository.NewUsersRepositoryImpl(db)
+	userRepo := repository.NewUsersRepositoryImpl(database.DB)
 	userService := services.NewUsersServiceImpl(userRepo)
 	userController := controllers.NewUserController(userService)
 
 	// initial account instance
-	ar := repository.NewAccountRepositoryImpl(db)
+	ar := repository.NewAccountRepositoryImpl(database.DB)
 	as := services.NewAccountServiceImpl(ar)
 	ac := controllers.NewAccountController(as)
 	// initial account instance
-	pr := repository.NewPostRepositoryImpl(db)
+	pr := repository.NewPostRepositoryImpl(database.DB)
 	ps := services.NewPostServiceImpl(pr)
 	pc := controllers.NewPostController(ps)
 

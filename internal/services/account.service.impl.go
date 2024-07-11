@@ -50,8 +50,8 @@ func (as AccountServiceImpl) Login(req *requests.LoginReq) responses.ResponseDat
 
 	// Generate token
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"sub": user.Id,
 		"username": user.UserName,
-		"sub":      user.Email,
 		"exp":      time.Now().Add(time.Hour).Unix(),
 	})
 	accessToken, errToken := token.SignedString([]byte(os.Getenv("SECRET_KEY")))

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"kathub/internal/database"
 	"kathub/internal/models"
+	"kathub/pkg/responses"
 	"net/http"
 	"os"
 	"strings"
@@ -23,7 +24,7 @@ func AuthenMiddleware(ctx *gin.Context) {
 		ctx.AbortWithStatus(http.StatusUnauthorized)
 		return
 	}
-	fmt.Print("=============", jwtToken[1])
+
 	// Decode/validate it
 	bearerToken, _ := jwt.Parse(jwtToken[1], func(token *jwt.Token) (interface{}, error) {
 		// Don't forget to validate the alg is what you expect:
@@ -46,19 +47,23 @@ func AuthenMiddleware(ctx *gin.Context) {
 
 		// Find the user with token Subject
 		var user models.User
-		db, err := database.DatabaseConnection()
-		if err != nil {
-			panic("init db Fail")
-		}
-		db.Where("user_name = ?", claims["username"]).First(&user)
 
-		fmt.Print(user.UserName)
+		database.DB.First(&user, claims["sub"])
+
 		if user.UserName == "" {
 			ctx.AbortWithStatus(http.StatusUnauthorized)
 		}
-
+		currentUser := responses.UserResponse{
+			Id: user.Id,
+			UserName: user.UserName,
+			FullName: user.FullName,
+			Email: user.Email,
+			Gender: user.Gender,
+			AvatarUrl: user.AvatarUrl,
+			CreatedAt: user.CreatedAt,
+		}
 		// Attach the request
-		ctx.Set("currentUser", user)
+		ctx.Set("currentUser", currentUser)
 
 		//Continue
 		ctx.Next()
