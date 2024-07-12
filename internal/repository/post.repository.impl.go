@@ -3,7 +3,6 @@ package repository
 import (
 	"kathub/internal/models"
 	"kathub/pkg/requests"
-	"kathub/pkg/responses"
 
 	"gorm.io/gorm"
 )
@@ -20,7 +19,7 @@ func NewPostRepositoryImpl(db *gorm.DB) PostRepository {
 func (p *PostRepositoryImpl) Create(req *requests.CreatePostReq, currentUser uint) (bool, error) {
 	post := &models.Post{
 		TextContent: req.TextContent,
-		UserId: currentUser,
+		UserId:      currentUser,
 	}
 	result := p.db.Create(post)
 
@@ -31,13 +30,18 @@ func (p *PostRepositoryImpl) Create(req *requests.CreatePostReq, currentUser uin
 }
 
 // GetAll implements PostRepository.
-func (p *PostRepositoryImpl) GetAll() ([]*responses.PostResponse, error) {
-	panic("unimplemented")
+func (p *PostRepositoryImpl) GetAll() ([]*models.Post, error) {
+	posts := []*models.Post{}
+
+	res := p.db.Find(&posts)
+
+	if res.Error != nil {
+		return nil, res.Error
+	}
+	return posts, nil
 }
 
 // Update implements PostRepository.
 func (p *PostRepositoryImpl) Update(post *requests.CreatePostReq) (bool, error) {
 	panic("unimplemented")
 }
-
-

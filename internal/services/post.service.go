@@ -7,4 +7,5 @@ import (
 
 type PostService interface {
 	Create(req *requests.CreatePostReq, currentUser uint) *responses.ResponseData
+	GetAll() *responses.ResponseData
 }

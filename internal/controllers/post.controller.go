@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"kathub/internal/services"
 	"kathub/pkg/requests"
 	"kathub/pkg/responses"
@@ -32,7 +31,6 @@ func (pc PostController) Create(ctx *gin.Context) {
 	newPost := requests.CreatePostReq{}
 	
 	currentUser, err := utils.GetUserProfile(ctx)
-	fmt.Print("================= ", currentUser)
 	if err != nil {
 		responses.APIResponse(ctx, 401, responses.StatusUnAuthorize, nil)
 	}
@@ -45,4 +43,16 @@ func (pc PostController) Create(ctx *gin.Context) {
 	result := pc.postService.Create(&newPost, currentUser.Id)
 	responses.APIResponse(ctx, result.StatusCode, result.Message, result.Data)
 
+}
+
+// GetAll		 	godoc
+// @Summary			Get All Posts
+// @Description		Get All Posts
+// @Produce			application/json
+// @Tags			Posts
+// @Success      	200 {object}  responses.ResponseData
+// @Router			/posts [get]
+func (pc PostController) GetAll(ctx *gin.Context){
+	result := pc.postService.GetAll()
+	responses.APIResponse(ctx, result.StatusCode, result.Message, result.Data)
 }

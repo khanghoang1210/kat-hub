@@ -47,6 +47,24 @@ const docTemplate = `{
             }
         },
         "/posts": {
+            "get": {
+                "description": "Get All Posts",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Posts"
+                ],
+                "summary": "Get All Posts",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ResponseData"
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "Create Posts",
                 "produces": [

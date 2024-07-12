@@ -8,5 +8,6 @@ const (
 	StatusResourceNotFound = "resource not found"
 	StatusUnAuthorize = "unauthorize"
 	StatusAuthorizeFail = "invalid username or password"
+	StatusNoData = "no data yet"
 )
 

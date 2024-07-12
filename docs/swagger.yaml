@@ -83,6 +83,18 @@ paths:
       tags:
       - accounts
   /posts:
+    get:
+      description: Get All Posts
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.ResponseData'
+      summary: Get All Posts
+      tags:
+      - Posts
     post:
       description: Create Posts
       parameters:
