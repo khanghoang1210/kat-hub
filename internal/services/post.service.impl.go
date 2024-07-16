@@ -2,10 +2,10 @@ package services
 
 import (
 	"kathub/internal/repository"
+
 	"kathub/pkg/requests"
 	"kathub/pkg/responses"
 	"net/http"
-
 )
 
 type PostServiceImpl struct {
@@ -36,21 +36,12 @@ func (p *PostServiceImpl) GetAll() *responses.ResponseData {
 			Data:       nil,
 		}
 	}
-	var posts []responses.PostResponse
 
-	for _, v := range result {
-		post := responses.PostResponse{
-			Id:        v.Id,
-			TextContent:  v.TextContent,
-			AuthorID: v.UserId,
-			CreatedAt: v.CreatedAt,
-		}
-		posts = append(posts, post)
-	}
+	
 	return  &responses.ResponseData{
 		StatusCode: http.StatusOK,
 		Message:    responses.StatusSuccess,
-		Data:       posts,
+		Data:       result,
 	}
 }
 

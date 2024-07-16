@@ -18,6 +18,24 @@ func NewUsersRepositoryImpl(Db *gorm.DB) UserRepository {
 	return &UserRepositoryImpl{db: Db}
 }
 
+func (u *UserRepositoryImpl) GetById(id uint) (*responses.UserResponse, error) {
+	var user models.User
+	res := u.db.First(&user, id)
+	if res.Error != nil {
+		return nil, res.Error
+	}
+	result := &responses.UserResponse{
+		Id:        user.Id,
+		UserName:  user.UserName,
+		FullName:  user.FullName,
+		Email:     user.Email,
+		AvatarUrl: user.AvatarUrl,
+		Gender:    user.Gender,
+		CreatedAt: user.CreatedAt,
+	}
+	return result, nil
+}
+
 func (u *UserRepositoryImpl) GetAll() ([]models.User, error) {
 	var users []models.User
 	resp := u.db.Find(&users)
@@ -41,14 +59,14 @@ func (u *UserRepositoryImpl) Create(req *requests.CreateUserReq) (bool, error) {
 	if existsRecord.RowsAffected != 0 {
 		return false, fmt.Errorf("user name %s already exists", req.UserName)
 	}
-	
+
 	user := &models.User{
 		UserName: req.UserName,
 		FullName: req.FullName,
 		Password: req.Password,
 		Email:    req.Email,
 	}
-	
+
 	result := u.db.Create(user)
 
 	if result.Error != nil {
@@ -69,11 +87,11 @@ func (u *UserRepositoryImpl) Update(req *requests.UpdateUserReq) (bool, error) {
 
 		return false, resp.Error
 	}
-	
+
 	user.FullName = req.FullName
 	user.Email = req.Email
 	user.Gender = req.Gender
-	
+
 	result := u.db.Save(user)
 
 	if result.Error != nil {
@@ -81,4 +99,3 @@ func (u *UserRepositoryImpl) Update(req *requests.UpdateUserReq) (bool, error) {
 	}
 	return true, nil
 }
-

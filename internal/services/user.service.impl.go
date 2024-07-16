@@ -13,10 +13,17 @@ type UserServiceImpl struct {
 	userRepository repository.UserRepository
 }
 
+
+
 func NewUsersServiceImpl(repository repository.UserRepository) UserService {
 	return &UserServiceImpl{
 		userRepository: repository,
 	}
+}
+
+// GetById implements UserService.
+func (u *UserServiceImpl) GetById(id uint) *responses.ResponseData {
+	panic("unimplemented")
 }
 
 func (u UserServiceImpl) GetAll() *responses.ResponseData {

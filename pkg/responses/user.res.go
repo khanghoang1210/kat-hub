@@ -3,11 +3,11 @@ package responses
 import "time"
 
 type UserResponse struct {
-	Id        uint
-	UserName  string
-	FullName  string
-	Email     string
-	Gender    string
-	AvatarUrl string
-	CreatedAt time.Time
+	Id        uint      `json:"id"`
+	UserName  string    `json:"userName"`
+	FullName  string    `json:"fullName"`
+	Email     string    `json:"email"`
+	Gender    string    `json:"gender"`
+	AvatarUrl string    `json:"avatarUrl"`
+	CreatedAt time.Time `json:"createdAt"`
 }

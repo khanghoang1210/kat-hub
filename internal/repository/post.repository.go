@@ -1,12 +1,13 @@
 package repository
 
 import (
-	"kathub/internal/models"
+
 	"kathub/pkg/requests"
+	"kathub/pkg/responses"
 )
 
 type PostRepository interface {
 	Create(post *requests.CreatePostReq, currentUser uint) (bool, error)
-	GetAll() ([]*models.Post, error)
+	GetAll() ([]*responses.PostResponse, error)
 	Update(post *requests.CreatePostReq) (bool, error)
 }

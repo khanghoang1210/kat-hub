@@ -9,13 +9,15 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-func NewRouter(userController *controllers.UserController, ac *controllers.AccountController, pc *controllers.PostController) *gin.Engine{
+func NewRouter(userController *controllers.UserController, ac *controllers.AccountController, pc *controllers.PostController) *gin.Engine {
 	r := gin.Default()
 
+
+	r.Use(middlewares.CORSMiddleware())
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	baseRouter:=r.Group("/api/v1")
+	baseRouter := r.Group("/api/v1")
 	userRouter := baseRouter.Group("/users")
-	userRouter.GET("",middlewares.AuthenMiddleware, userController.GetAll)
+	userRouter.GET("", middlewares.AuthenMiddleware, userController.GetAll)
 	userRouter.POST("", userController.Create)
 	userRouter.PUT("", userController.Update)
 
@@ -23,7 +25,9 @@ func NewRouter(userController *controllers.UserController, ac *controllers.Accou
 	accountRouter.POST("/login", ac.Login)
 
 	postRouter := baseRouter.Group("/posts")
-	postRouter.POST("",middlewares.AuthenMiddleware, pc.Create)
+	postRouter.POST("", middlewares.AuthenMiddleware, pc.Create)
 	postRouter.GET("", pc.GetAll)
+
+
 	return r
 }

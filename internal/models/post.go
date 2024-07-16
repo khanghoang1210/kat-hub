@@ -10,4 +10,5 @@ type Post struct {
 	UserId      uint   `gorm:"foreignKey:UserRefer"`
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
+	User        User `gorm:"foreignKey:UserId"`
 }

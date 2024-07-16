@@ -3,6 +3,7 @@ package repository
 import (
 	"kathub/internal/models"
 	"kathub/pkg/requests"
+	"kathub/pkg/responses"
 
 	"gorm.io/gorm"
 )
@@ -30,15 +31,35 @@ func (p *PostRepositoryImpl) Create(req *requests.CreatePostReq, currentUser uin
 }
 
 // GetAll implements PostRepository.
-func (p *PostRepositoryImpl) GetAll() ([]*models.Post, error) {
+func (p *PostRepositoryImpl) GetAll() ([]*responses.PostResponse, error) {
 	posts := []*models.Post{}
 
-	res := p.db.Find(&posts)
+	res := p.db.Preload("User").Order("created_at DESC").Find(&posts)
+	var result []*responses.PostResponse
+
+	for _, v := range posts {
+		
+		post := &responses.PostResponse{
+			Id:        v.Id,
+			TextContent:  v.TextContent,
+			Author: responses.UserResponse{
+				Id: v.UserId,
+				UserName: v.User.UserName,
+				FullName: v.User.FullName,
+				Email: v.User.Email,
+				AvatarUrl: v.User.AvatarUrl,
+				Gender: v.User.Gender,
+				CreatedAt: v.User.CreatedAt,
+			},
+			CreatedAt: v.CreatedAt,
+		}
+		result = append(result, post)
+	}
 
 	if res.Error != nil {
 		return nil, res.Error
 	}
-	return posts, nil
+	return result, nil
 }
 
 // Update implements PostRepository.
