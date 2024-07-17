@@ -9,6 +9,9 @@ build:
 	
 	@go build -o main cmd/api/main.go
 
+swag-gen:
+	@ swag init -g cmd/server/main.go
+
 # Run the application
 run:
 	@go run cmd/server/main.go

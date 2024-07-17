@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"errors"
 	"kathub/internal/models"
 	"kathub/pkg/requests"
 	"kathub/pkg/responses"
@@ -52,6 +53,7 @@ func (p *PostRepositoryImpl) GetAll() ([]*responses.PostResponse, error) {
 				CreatedAt: v.User.CreatedAt,
 			},
 			CreatedAt: v.CreatedAt,
+			UpdatedAt: v.UpdatedAt,
 		}
 		result = append(result, post)
 	}
@@ -63,6 +65,22 @@ func (p *PostRepositoryImpl) GetAll() ([]*responses.PostResponse, error) {
 }
 
 // Update implements PostRepository.
-func (p *PostRepositoryImpl) Update(post *requests.CreatePostReq) (bool, error) {
-	panic("unimplemented")
+func (p *PostRepositoryImpl) Update(req *requests.CreatePostReq, id uint) (bool, error) {
+	post := models.Post{}
+	res := p.db.First(&post, id)
+	if res.Error != nil {
+
+		if res.RowsAffected == 0 {
+			return false, errors.New(responses.StatusResourceNotFound)
+		}
+
+		return false, res.Error
+	}
+	post.TextContent = req.TextContent
+	result := p.db.Save(&post)
+
+	if result.Error != nil {
+		return false, result.Error
+	}
+	return true, nil
 }

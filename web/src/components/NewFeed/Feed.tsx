@@ -9,8 +9,8 @@ import { timeAgo } from "@/common/convertToTimeAgo";
 
 type FeedProps = {};
 const POST_ENDPOINT = "/posts";
-const Feed: React.FC<FeedProps> =  () => {
 
+const Feed: React.FC<FeedProps> =  () => {
   const [posts, setPosts] = useState<Post[]>([])
   useEffect(()  => {
     async function fetchData() {
@@ -28,11 +28,10 @@ const Feed: React.FC<FeedProps> =  () => {
         console.log(data.data)
         setPosts(data.data);
       } catch (error) {
-       
+        throw error
       }
     }
     fetchData();
-   
 
   }, []);
   console.log(posts)

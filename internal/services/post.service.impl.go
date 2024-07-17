@@ -2,7 +2,6 @@ package services
 
 import (
 	"kathub/internal/repository"
-
 	"kathub/pkg/requests"
 	"kathub/pkg/responses"
 	"net/http"
@@ -37,8 +36,7 @@ func (p *PostServiceImpl) GetAll() *responses.ResponseData {
 		}
 	}
 
-	
-	return  &responses.ResponseData{
+	return &responses.ResponseData{
 		StatusCode: http.StatusOK,
 		Message:    responses.StatusSuccess,
 		Data:       result,
@@ -50,6 +48,23 @@ func (p *PostServiceImpl) Create(req *requests.CreatePostReq, currentUser uint) 
 
 	result, err := p.postRepo.Create(req, currentUser)
 
+	if err != nil {
+		return &responses.ResponseData{
+			StatusCode: http.StatusInternalServerError,
+			Message:    err.Error(),
+			Data:       false,
+		}
+	}
+
+	return &responses.ResponseData{
+		StatusCode: http.StatusCreated,
+		Message:    responses.StatusSuccess,
+		Data:       result,
+	}
+}
+// Update implements PostService.
+func (p *PostServiceImpl) Update(req *requests.CreatePostReq, id uint) *responses.ResponseData {
+	result, err := p.postRepo.Update(req,id)
 	if err != nil {
 		return &responses.ResponseData{
 			StatusCode: http.StatusInternalServerError,

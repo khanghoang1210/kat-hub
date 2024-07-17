@@ -5,6 +5,7 @@ import (
 	"kathub/pkg/requests"
 	"kathub/pkg/responses"
 	"kathub/pkg/utils"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -21,7 +22,6 @@ func NewPostController(service services.PostService) *PostController {
 
 // Create		 	godoc
 // @Summary			Create Posts
-// @Description		Create Posts
 // @Param			body body requests.CreatePostReq true "Posts"
 // @Produce			application/json
 // @Tags			Posts
@@ -29,7 +29,7 @@ func NewPostController(service services.PostService) *PostController {
 // @Router			/posts [post]
 func (pc PostController) Create(ctx *gin.Context) {
 	newPost := requests.CreatePostReq{}
-	
+
 	currentUser, err := utils.GetUserProfile(ctx)
 	if err != nil {
 		responses.APIResponse(ctx, 401, responses.StatusUnAuthorize, nil)
@@ -47,12 +47,31 @@ func (pc PostController) Create(ctx *gin.Context) {
 
 // GetAll		 	godoc
 // @Summary			Get All Posts
-// @Description		Get All Posts
 // @Produce			application/json
 // @Tags			Posts
 // @Success      	200 {object}  responses.ResponseData
 // @Router			/posts [get]
-func (pc PostController) GetAll(ctx *gin.Context){
+func (pc PostController) GetAll(ctx *gin.Context) {
 	result := pc.postService.GetAll()
+	responses.APIResponse(ctx, result.StatusCode, result.Message, result.Data)
+}
+
+// GetAll		 	godoc
+// @Summary			Update Post
+// @Produce			application/json
+// @Param 			id  path  int  true  "Post ID"
+// @Param			body body requests.CreatePostReq true "Posts"
+// @Tags			Posts
+// @Success      	200 {object}  responses.ResponseData
+// @Router			/posts [put]
+func (pc PostController) Update(ctx *gin.Context) {
+	updatePost := requests.CreatePostReq{}
+	id, errParse := strconv.Atoi(ctx.Param("id"))
+
+	if err := ctx.ShouldBindJSON(&updatePost); errParse != nil || err != nil {
+		responses.APIResponse(ctx, 400, responses.StatusParamInvalid, nil)
+		return
+	}
+	result := pc.postService.Update(&updatePost, uint(id))
 	responses.APIResponse(ctx, result.StatusCode, result.Message, result.Data)
 }

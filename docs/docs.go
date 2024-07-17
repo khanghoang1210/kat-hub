@@ -48,7 +48,6 @@ const docTemplate = `{
         },
         "/posts": {
             "get": {
-                "description": "Get All Posts",
                 "produces": [
                     "application/json"
                 ],
@@ -65,8 +64,42 @@ const docTemplate = `{
                     }
                 }
             },
+            "put": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Posts"
+                ],
+                "summary": "Update Post",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Post ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Posts",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.CreatePostReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ResponseData"
+                        }
+                    }
+                }
+            },
             "post": {
-                "description": "Create Posts",
                 "produces": [
                     "application/json"
                 ],
