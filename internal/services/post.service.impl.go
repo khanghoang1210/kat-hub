@@ -79,3 +79,22 @@ func (p *PostServiceImpl) Update(req *requests.CreatePostReq, id uint) *response
 		Data:       result,
 	}
 }
+
+func (p *PostServiceImpl) Delete(id uint) *responses.ResponseData {
+	result, err := p.postRepo.Delete(id)
+
+	if err != nil {
+		return &responses.ResponseData{
+			StatusCode: http.StatusInternalServerError,
+			Message:    err.Error(),
+			Data:       false,
+		}
+	}
+
+	return &responses.ResponseData{
+		StatusCode: http.StatusOK,
+		Message:    responses.StatusSuccess,
+		Data:       result,
+	}
+
+}

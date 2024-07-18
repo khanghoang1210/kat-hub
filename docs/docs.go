@@ -17,7 +17,6 @@ const docTemplate = `{
     "paths": {
         "/accounts/login": {
             "post": {
-                "description": "Login",
                 "produces": [
                     "application/json"
                 ],
@@ -126,11 +125,36 @@ const docTemplate = `{
                         }
                     }
                 }
+            },
+            "delete": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Posts"
+                ],
+                "summary": "Delete Post",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Post ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ResponseData"
+                        }
+                    }
+                }
             }
         },
         "/users": {
             "get": {
-                "description": "Get All Users",
                 "produces": [
                     "application/json"
                 ],
@@ -148,7 +172,6 @@ const docTemplate = `{
                 }
             },
             "put": {
-                "description": "Update Users",
                 "produces": [
                     "application/json"
                 ],
@@ -177,7 +200,6 @@ const docTemplate = `{
                 }
             },
             "post": {
-                "description": "Create Users",
                 "produces": [
                     "application/json"
                 ],

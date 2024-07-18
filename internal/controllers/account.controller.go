@@ -20,7 +20,6 @@ func NewAccountController(service services.AccountService) *AccountController {
 
 // GetAll		godoc
 // @Summary			Login
-// @Description		Login
 // @Param			body body requests.LoginReq true "Accounts"
 // @Produce			application/json
 // @Tags			accounts

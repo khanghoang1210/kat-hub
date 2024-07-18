@@ -11,7 +11,6 @@
     "paths": {
         "/accounts/login": {
             "post": {
-                "description": "Login",
                 "produces": [
                     "application/json"
                 ],
@@ -120,11 +119,36 @@
                         }
                     }
                 }
+            },
+            "delete": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Posts"
+                ],
+                "summary": "Delete Post",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Post ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ResponseData"
+                        }
+                    }
+                }
             }
         },
         "/users": {
             "get": {
-                "description": "Get All Users",
                 "produces": [
                     "application/json"
                 ],
@@ -142,7 +166,6 @@
                 }
             },
             "put": {
-                "description": "Update Users",
                 "produces": [
                     "application/json"
                 ],
@@ -171,7 +194,6 @@
                 }
             },
             "post": {
-                "description": "Create Users",
                 "produces": [
                     "application/json"
                 ],

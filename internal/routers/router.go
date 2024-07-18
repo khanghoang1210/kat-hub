@@ -28,7 +28,7 @@ func NewRouter(userController *controllers.UserController, ac *controllers.Accou
 	postRouter.POST("", middlewares.AuthenMiddleware, pc.Create)
 	postRouter.GET("", pc.GetAll)
 	postRouter.PUT("/:id", middlewares.AuthenMiddleware, pc.Update)
-
+	postRouter.DELETE("/:id", middlewares.AuthenMiddleware, pc.Delete)
 
 	return r
 }

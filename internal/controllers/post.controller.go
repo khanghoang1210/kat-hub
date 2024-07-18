@@ -75,3 +75,21 @@ func (pc PostController) Update(ctx *gin.Context) {
 	result := pc.postService.Update(&updatePost, uint(id))
 	responses.APIResponse(ctx, result.StatusCode, result.Message, result.Data)
 }
+
+// GetAll		 	godoc
+// @Summary			Delete Post
+// @Produce			application/json
+// @Param 			id  path  int  true  "Post ID"
+// @Tags			Posts
+// @Success      	200 {object}  responses.ResponseData
+// @Router			/posts [delete]
+func (pc PostController) Delete(ctx *gin.Context) {
+	id, errParse := strconv.Atoi(ctx.Param("id"))
+
+	if  errParse != nil {
+		responses.APIResponse(ctx, 400, responses.StatusParamInvalid, nil)
+		return
+	}
+	result := pc.postService.Delete(uint(id))
+	responses.APIResponse(ctx, result.StatusCode, result.Message, result.Data)
+}

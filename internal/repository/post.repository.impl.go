@@ -84,3 +84,12 @@ func (p *PostRepositoryImpl) Update(req *requests.CreatePostReq, id uint) (bool,
 	}
 	return true, nil
 }
+
+func (p * PostRepositoryImpl)Delete(id uint) (bool, error){
+	res := p.db.Delete(&models.Post{}, id)
+
+	if res.Error != nil {
+		return false, res.Error
+	}
+	return true, nil
+}

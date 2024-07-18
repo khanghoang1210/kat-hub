@@ -20,7 +20,6 @@ func NewUserController(service services.UserService) *UserController {
 
 // GetAll		godoc
 // @Summary			Get All Users
-// @Description		Get All Users
 // @Produce			application/json
 // @Tags			users
 // @Success      	200 {object} responses.ResponseData
@@ -32,7 +31,6 @@ func (u UserController) GetAll(ctx *gin.Context) {
 
 // Create		 	godoc
 // @Summary			Create Users
-// @Description		Create Users
 // @Param			body body requests.CreateUserReq true "Users"
 // @Produce			application/json
 // @Tags			users
@@ -52,7 +50,6 @@ func (u UserController) Create(ctx *gin.Context) {
 
 // GetAll		godoc
 // @Summary			Update Users
-// @Description		Update Users
 // @Param			body body requests.UpdateUserReq true "Users"
 // @Produce			application/json
 // @Tags			users
