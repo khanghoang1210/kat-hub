@@ -16,7 +16,7 @@ swag-gen:
 run:
 	@go run cmd/server/main.go
 
-migration-run:
+migrate:
 	@go run internal/migration/migration.go
 
 # Run web

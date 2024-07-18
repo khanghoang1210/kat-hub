@@ -10,6 +10,7 @@ type User struct {
 	FullName  string `gorm:"not null"`
 	Email     string `gorm:"not null"`
 	Password  string `gorm:"not null"`
+	Title     string
 	AvatarUrl string
 	Gender    string
 	CreatedAt time.Time

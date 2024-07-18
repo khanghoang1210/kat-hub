@@ -27,6 +27,7 @@ func NewRouter(userController *controllers.UserController, ac *controllers.Accou
 	postRouter := baseRouter.Group("/posts")
 	postRouter.POST("", middlewares.AuthenMiddleware, pc.Create)
 	postRouter.GET("", pc.GetAll)
+	postRouter.GET("/:id", pc.GetById)
 	postRouter.PUT("/:id", middlewares.AuthenMiddleware, pc.Update)
 	postRouter.DELETE("/:id", middlewares.AuthenMiddleware, pc.Delete)
 

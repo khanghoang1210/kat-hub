@@ -48,6 +48,7 @@ func (p *PostRepositoryImpl) GetAll() ([]*responses.PostResponse, error) {
 				UserName: v.User.UserName,
 				FullName: v.User.FullName,
 				Email: v.User.Email,
+				Title: v.User.Title,
 				AvatarUrl: v.User.AvatarUrl,
 				Gender: v.User.Gender,
 				CreatedAt: v.User.CreatedAt,
@@ -92,4 +93,34 @@ func (p * PostRepositoryImpl)Delete(id uint) (bool, error){
 		return false, res.Error
 	}
 	return true, nil
+}
+
+func (p *PostRepositoryImpl) GetById(id uint) (*responses.PostResponse, error){
+	var post models.Post
+	res := p.db.Preload("User").First(&post, id)
+	if res.Error != nil {
+
+		if res.RowsAffected == 0 {
+			return nil, errors.New(responses.StatusResourceNotFound)
+		}
+
+		return nil, res.Error
+	}
+	result := &responses.PostResponse{
+		Id:        post.Id,
+		TextContent: post.TextContent,
+		Author: responses.UserResponse{
+			Id: post.UserId,
+			UserName: post.User.UserName,
+			FullName: post.User.FullName,
+			Email: post.User.Email,
+			Title: post.User.Title,
+			AvatarUrl: post.User.AvatarUrl,
+			Gender: post.User.Gender,
+			CreatedAt: post.User.CreatedAt,
+		},
+		CreatedAt: post.CreatedAt,
+		UpdatedAt: post.UpdatedAt,
+	}
+	return result, nil
 }

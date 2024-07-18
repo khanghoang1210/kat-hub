@@ -84,6 +84,7 @@ func (p *PostServiceImpl) Delete(id uint) *responses.ResponseData {
 	result, err := p.postRepo.Delete(id)
 
 	if err != nil {
+		
 		return &responses.ResponseData{
 			StatusCode: http.StatusInternalServerError,
 			Message:    err.Error(),
@@ -97,4 +98,29 @@ func (p *PostServiceImpl) Delete(id uint) *responses.ResponseData {
 		Data:       result,
 	}
 
+}
+
+func (p *PostServiceImpl) GetById(id uint) *responses.ResponseData {
+	result, err := p.postRepo.GetById(id)
+
+	if err != nil {
+		if err.Error() == responses.StatusResourceNotFound {
+			return &responses.ResponseData{
+				StatusCode: http.StatusNoContent,
+				Message:    err.Error(),
+				Data:       false,
+			}
+		}
+		return &responses.ResponseData{
+			StatusCode: http.StatusInternalServerError,
+			Message:    err.Error(),
+			Data:       false,
+		}
+	}
+
+	return &responses.ResponseData{
+		StatusCode: http.StatusOK,
+		Message:    responses.StatusSuccess,
+		Data:       result,
+	}
 }

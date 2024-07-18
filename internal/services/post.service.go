@@ -8,6 +8,7 @@ import (
 type PostService interface {
 	Create(req *requests.CreatePostReq, currentUser uint) *responses.ResponseData
 	GetAll() *responses.ResponseData
+	GetById(id uint) *responses.ResponseData
 	Update(req *requests.CreatePostReq, id uint) *responses.ResponseData
 	Delete(id uint) *responses.ResponseData
 }

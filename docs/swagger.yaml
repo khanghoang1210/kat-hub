@@ -15,6 +15,8 @@ definitions:
         type: string
       password:
         type: string
+      title:
+        type: string
       userName:
         type: string
     required:
@@ -41,6 +43,8 @@ definitions:
       fullName:
         type: string
       gender:
+        type: string
+      title:
         type: string
       userName:
         type: string
@@ -149,6 +153,24 @@ paths:
           schema:
             $ref: '#/definitions/responses.ResponseData'
       summary: Update Post
+      tags:
+      - Posts
+  /posts/{id}:
+    get:
+      parameters:
+      - description: Post ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.ResponseData'
+      summary: Get Post By Id
       tags:
       - Posts
   /users:

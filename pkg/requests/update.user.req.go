@@ -5,4 +5,5 @@ type UpdateUserReq struct {
 	FullName string `json:"fullName"`
 	Email    string `json:"email"`
 	Gender   string `json:"gender"`
+	Title    string `json:"title"`
 }

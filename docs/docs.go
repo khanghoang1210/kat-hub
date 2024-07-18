@@ -153,6 +153,34 @@ const docTemplate = `{
                 }
             }
         },
+        "/posts/{id}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Posts"
+                ],
+                "summary": "Get Post By Id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Post ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ResponseData"
+                        }
+                    }
+                }
+            }
+        },
         "/users": {
             "get": {
                 "produces": [
@@ -260,6 +288,9 @@ const docTemplate = `{
                 "password": {
                     "type": "string"
                 },
+                "title": {
+                    "type": "string"
+                },
                 "userName": {
                     "type": "string"
                 }
@@ -293,6 +324,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "gender": {
+                    "type": "string"
+                },
+                "title": {
                     "type": "string"
                 },
                 "userName": {
