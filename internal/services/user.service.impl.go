@@ -23,7 +23,28 @@ func NewUsersServiceImpl(repository repository.UserRepository) UserService {
 
 // GetById implements UserService.
 func (u *UserServiceImpl) GetById(id uint) *responses.ResponseData {
-	panic("unimplemented")
+	result, err := u.userRepository.GetById(id)
+	
+	if err != nil {
+		if err.Error() == responses.StatusResourceNotFound {
+			return &responses.ResponseData{
+				StatusCode: http.StatusNoContent,
+				Message:    err.Error(),
+				Data:       false,
+			}
+		}
+		return &responses.ResponseData{
+			StatusCode: http.StatusInternalServerError,
+			Message:    err.Error(),
+			Data:       false,
+		}
+	}
+
+	return &responses.ResponseData{
+		StatusCode: http.StatusOK,
+		Message:    responses.StatusSuccess,
+		Data:       result,
+	}
 }
 
 func (u UserServiceImpl) GetAll() *responses.ResponseData {

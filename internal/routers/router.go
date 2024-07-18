@@ -18,6 +18,7 @@ func NewRouter(userController *controllers.UserController, ac *controllers.Accou
 	baseRouter := r.Group("/api/v1")
 	userRouter := baseRouter.Group("/users")
 	userRouter.GET("", middlewares.AuthenMiddleware, userController.GetAll)
+	userRouter.GET("/:id", middlewares.AuthenMiddleware, userController.GetById)
 	userRouter.POST("", userController.Create)
 	userRouter.PUT("", userController.Update)
 

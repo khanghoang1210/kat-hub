@@ -29,6 +29,7 @@ func (u *UserRepositoryImpl) GetById(id uint) (*responses.UserResponse, error) {
 		UserName:  user.UserName,
 		FullName:  user.FullName,
 		Email:     user.Email,
+		Title:     user.Title,
 		AvatarUrl: user.AvatarUrl,
 		Gender:    user.Gender,
 		CreatedAt: user.CreatedAt,
@@ -91,6 +92,7 @@ func (u *UserRepositoryImpl) Update(req *requests.UpdateUserReq) (bool, error) {
 	user.FullName = req.FullName
 	user.Email = req.Email
 	user.Gender = req.Gender
+	user.Title = req.Title
 
 	result := u.db.Save(user)
 

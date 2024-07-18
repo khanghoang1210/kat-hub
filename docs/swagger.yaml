@@ -221,4 +221,22 @@ paths:
       summary: Update Users
       tags:
       - users
+  /users/{id}:
+    get:
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.ResponseData'
+      summary: Get User By ID
+      tags:
+      - users
 swagger: "2.0"

@@ -4,6 +4,7 @@ import (
 	"kathub/internal/services"
 	"kathub/pkg/requests"
 	"kathub/pkg/responses"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -64,4 +65,22 @@ func (u UserController) Update(ctx *gin.Context) {
 	
 	result := u.userService.Update(&updatedUser)
 	responses.APIResponse(ctx,result.StatusCode, result.Message, result.Data)
+}
+
+// GetAll		godoc
+// @Summary			Get User By ID
+// @Param			id  path  int  true  "User ID"
+// @Produce			application/json
+// @Tags			users
+// @Success      	200 {object} responses.ResponseData
+// @Router			/users/{id} [get]
+func (u UserController) GetById(ctx *gin.Context){
+	id, errParse := strconv.Atoi(ctx.Param("id"))
+
+	if  errParse != nil {
+		responses.APIResponse(ctx, 400, responses.StatusParamInvalid, nil)
+		return
+	}
+	result := u.userService.GetById(uint(id))
+	responses.APIResponse(ctx, result.StatusCode, result.Message, result.Data)
 }
