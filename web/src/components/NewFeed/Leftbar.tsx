@@ -1,9 +1,14 @@
+import { User } from "@/models/user";
 import Image from "next/image";
 import React from "react";
 
-type LeftbarProps = {};
+type LeftbarProps = {
+  userName: string | undefined;
+  title: string | undefined;
+  avatarUrl: string | undefined;
+};
 
-const Leftbar: React.FC<LeftbarProps> = () => {
+const Leftbar: React.FC<LeftbarProps> = ({userName, title, avatarUrl}) => {
   return (
     <div className="absolute rounded-lg left-20 top-20 w-64 h-auto p-0 mt-2 bg-white-900 shadow text-black-600">
       <div className="relative  w-full ">
@@ -22,8 +27,8 @@ const Leftbar: React.FC<LeftbarProps> = () => {
         />
         </div>
         <div className="mt-10 ml-4">
-          <h2 className="font-bold text-lg">Robert Fox</h2>
-          <p className="text-gray-500">Software Engineer</p>
+          <h2 className="font-bold text-lg">{userName}</h2>
+          <p className="text-gray-500">{title}</p>
         </div>
       </div>
       <div className="mt-8 space-y-4 m-3">

@@ -10,8 +10,10 @@ const Topbar: React.FC<TopbarProps> = () => {
   return (
     <nav className="relative bg-white-900 flex h-[70px] w-full items-center px-7 text-dark-gray-7">
       <div className="relative left-12">
-        <Image src={"/Logomark.svg"} alt="Logo" height={40} width={40}/>
-        <p className="text-black-900 absolute top-1/4 left-12 font-bold font-manrope">Kathub</p>
+        <Image src={"/Logomark.svg"} alt="Logo" height={40} width={40} />
+        <p className="text-black-900 absolute top-1/4 left-12 font-bold font-manrope">
+          Kathub
+        </p>
       </div>
       <div className="relative w-[620px] mx-auto ml-52">
         <svg
@@ -63,8 +65,16 @@ const Topbar: React.FC<TopbarProps> = () => {
         />
       </div>
       <div className="relative mx-8 mr-36">
-        <p className="text-black-800 font-medium">Log out</p>
-        <Image src={"assets/icons/user.svg"} alt="Logo" height={20} width={20} className="absolute  top-0.5 left-16"/>
+        <button>
+          <p className="text-black-800 font-medium">Log out</p>
+          <Image
+            src={"assets/icons/user.svg"}
+            alt="Logo"
+            height={20}
+            width={20}
+            className="absolute  top-0.5 left-16"
+          />
+        </button>
       </div>
     </nav>
   );
