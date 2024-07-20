@@ -1,7 +1,7 @@
 
-import Topbar from "@/components/Topbar/Topbar";
+import Topbar from "@/components/topbar/Topbar";
 
-import Feed from "@/components/NewFeed/Feed";
+import Feed from "@/components/feed/Feed";
 
 
 
@@ -11,7 +11,6 @@ export default function Home() {
       <div>
         <Topbar />
         <Feed/>
-       
       </div>
     </>
   );

@@ -12,9 +12,11 @@ const Leftbar: React.FC<LeftbarProps> = ({userName, title, avatarUrl}) => {
   return (
     <div className="absolute rounded-lg left-20 top-20 w-64 h-auto p-0 mt-2 bg-white-900 shadow text-black-600">
       <div className="relative  w-full ">
-        <img
-          src="https://via.placeholder.com/256x100" // Replace with the actual cover image source
+        <Image
+          src="https://via.placeholder.com/256x100" 
           alt="Cover"
+          width={256}
+          height={100}
           className="w-screen h-fit object-cover rounded-t-lg"
         />
         <div className="absolute top-16 left-4 ">
