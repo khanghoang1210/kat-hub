@@ -20,10 +20,11 @@ func main() {
 	//init db
 	database.DatabaseConnection()
 	fmt.Print(database.DB.Name())
-
+	
+	uploadService := services.NewUploadServiceImpl()
 	// initial user instance
 	userRepo := repository.NewUsersRepositoryImpl(database.DB)
-	userService := services.NewUsersServiceImpl(userRepo)
+	userService := services.NewUsersServiceImpl(userRepo, uploadService)
 	userController := controllers.NewUserController(userService)
 
 	// initial account instance

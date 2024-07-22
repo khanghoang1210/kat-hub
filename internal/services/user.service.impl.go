@@ -1,6 +1,7 @@
 package services
 
 import (
+	"io"
 	"kathub/internal/repository"
 	"kathub/pkg/requests"
 	"kathub/pkg/responses"
@@ -11,13 +12,15 @@ import (
 
 type UserServiceImpl struct {
 	userRepository repository.UserRepository
+	uploadService UploadService
 }
 
 
 
-func NewUsersServiceImpl(repository repository.UserRepository) UserService {
+func NewUsersServiceImpl(repository repository.UserRepository, upload UploadService) UserService {
 	return &UserServiceImpl{
 		userRepository: repository,
+		uploadService: upload,
 	}
 }
 
@@ -129,5 +132,14 @@ func (us UserServiceImpl) Update(user *requests.UpdateUserReq) *responses.Respon
 		StatusCode: http.StatusCreated,
 		Message:    responses.StatusSuccess,
 		Data:       userUpdated,
+	}
+}
+
+func (us UserServiceImpl) UploadAvatar(bucketName string, fileName string, data io.Reader) *responses.ResponseData {
+
+	return &responses.ResponseData{
+		StatusCode: http.StatusCreated,
+		Message:    responses.StatusSuccess,
+		Data:       nil,
 	}
 }
