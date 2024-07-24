@@ -19,12 +19,13 @@ import (
 func main() {
 	//init db
 	database.DatabaseConnection()
-	fmt.Print(database.DB.Name())
+	fmt.Println(database.DB.Name())
 	
-	uploadService := services.NewUploadServiceImpl()
+	supabase := services.NewS3ServiceImpl(database.S3Client)
+	fmt.Println(database.S3Client)
 	// initial user instance
 	userRepo := repository.NewUsersRepositoryImpl(database.DB)
-	userService := services.NewUsersServiceImpl(userRepo, uploadService)
+	userService := services.NewUsersServiceImpl(userRepo, supabase)
 	userController := controllers.NewUserController(userService)
 
 	// initial account instance

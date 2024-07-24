@@ -28,6 +28,8 @@ require (
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/supabase-community/storage-go v0.7.0 // indirect
 	golang.org/x/tools v0.22.0 // indirect
+	launchpad.net/goamz v0.0.0-20140813150539-000000000049 // indirect
+
 )
 
 require (
