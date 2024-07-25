@@ -21,8 +21,9 @@ func main() {
 	database.DatabaseConnection()
 	fmt.Println(database.DB.Name())
 	
+	database.S3Connection()
 	supabase := services.NewS3ServiceImpl(database.S3Client)
-	fmt.Println(database.S3Client)
+	fmt.Println(database.S3Client.Bucket("test"))
 	// initial user instance
 	userRepo := repository.NewUsersRepositoryImpl(database.DB)
 	userService := services.NewUsersServiceImpl(userRepo, supabase)
