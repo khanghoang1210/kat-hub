@@ -7,13 +7,9 @@ import (
 	_ "github.com/joho/godotenv/autoload"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	"launchpad.net/goamz/s3"
-	"launchpad.net/goamz/aws"
-
 )
 
 var DB *gorm.DB
-var S3Client *s3.S3
 
 func DatabaseConnection() {
 	var err error
@@ -30,17 +26,6 @@ func DatabaseConnection() {
 	// sqlDB.SetConnMaxLifetime(time.Duration(3600))
 }
 
-func S3Connection(){
-	
-	access := os.Getenv("S3_ACCESS_KEY")
-	secret := os.Getenv("S3_SECRET_KEY")
-	auth := aws.Auth{
-        AccessKey: access,
-        SecretKey: secret,
-    }
-	apsoutheast := aws.APSoutheast
-	S3Client = s3.New(auth, apsoutheast)
-}
 
 
 

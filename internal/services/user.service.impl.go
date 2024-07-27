@@ -1,7 +1,6 @@
 package services
 
 import (
-	"io"
 	"kathub/internal/repository"
 	"kathub/pkg/requests"
 	"kathub/pkg/responses"
@@ -12,22 +11,20 @@ import (
 
 type UserServiceImpl struct {
 	userRepository repository.UserRepository
-	s3 S3Service
+	s3             S3Service
 }
-
-
 
 func NewUsersServiceImpl(repository repository.UserRepository, s3 S3Service) UserService {
 	return &UserServiceImpl{
 		userRepository: repository,
-		s3: s3,
+		s3:             s3,
 	}
 }
 
 // GetById implements UserService.
 func (u *UserServiceImpl) GetById(id uint) *responses.ResponseData {
 	result, err := u.userRepository.GetById(id)
-	
+
 	if err != nil {
 		if err.Error() == responses.StatusResourceNotFound {
 			return &responses.ResponseData{
@@ -135,8 +132,8 @@ func (us UserServiceImpl) Update(user *requests.UpdateUserReq) *responses.Respon
 	}
 }
 
-func (us UserServiceImpl) UploadAvatar(bucketName string, fileName string, data io.Reader) *responses.ResponseData {
-
+func (us UserServiceImpl) UploadAvatar(bucketName string, fileName string, key string, prefix string) *responses.ResponseData {
+	bucketName = "user-avatar"
 	return &responses.ResponseData{
 		StatusCode: http.StatusCreated,
 		Message:    responses.StatusSuccess,

@@ -1,3 +1,1 @@
 package initialize
-
-func InitDB()
