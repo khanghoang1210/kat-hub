@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	_ "kathub/docs"
 	"kathub/internal/controllers"
@@ -10,9 +9,6 @@ import (
 	"kathub/internal/repository"
 	"kathub/internal/routers"
 	"kathub/internal/services"
-
-	"github.com/aws/aws-sdk-go-v2/service/s3"
-	"github.com/aws/aws-sdk-go/aws"
 )
 
 // @title   Kathub API
@@ -27,19 +23,12 @@ func main() {
 	fmt.Println(database.DB.Name())
 	
 	initialize.CreateSession()
-	fmt.Println(initialize.S3Client)
-	output, err := initialize.S3Client.ListObjectsV2(context.TODO(), &s3.ListObjectsV2Input{
-		Bucket: aws.String("user-avatar"),
-		
-	})
-	fmt.Println(output)
-	fmt.Println(err)
-	s3Service := services.NewS3ServiceImpl(initialize.S3Client)
+	storageService := services.NewStorageServiceImpl(initialize.StorageClient)
 
 
 	// initial user instance
 	userRepo := repository.NewUsersRepositoryImpl(database.DB)
-	userService := services.NewUsersServiceImpl(userRepo, s3Service)
+	userService := services.NewUsersServiceImpl(userRepo, storageService)
 	userController := controllers.NewUserController(userService)
 
 	// initial account instance

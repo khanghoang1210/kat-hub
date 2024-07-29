@@ -2,6 +2,6 @@ package services
 
 
 
-type S3Service interface {
+type StorageService interface {
 	Upload(bucketName string, fileName string, bucketKey string) error
 }

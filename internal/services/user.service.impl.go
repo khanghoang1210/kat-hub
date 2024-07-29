@@ -11,13 +11,13 @@ import (
 
 type UserServiceImpl struct {
 	userRepository repository.UserRepository
-	s3             S3Service
+	storage             StorageService
 }
 
-func NewUsersServiceImpl(repository repository.UserRepository, s3 S3Service) UserService {
+func NewUsersServiceImpl(repository repository.UserRepository, storage StorageService) UserService {
 	return &UserServiceImpl{
 		userRepository: repository,
-		s3:             s3,
+		storage:             storage,
 	}
 }
 
