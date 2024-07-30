@@ -84,3 +84,20 @@ func (u UserController) GetById(ctx *gin.Context){
 	result := u.userService.GetById(uint(id))
 	responses.APIResponse(ctx, result.StatusCode, result.Message, result.Data)
 }
+
+func (u UserController) UploadAvatar(ctx * gin.Context){
+	file, err := ctx.FormFile("avatar")
+	if err != nil {
+		responses.APIResponse(ctx, 400, responses.StatusParamInvalid, nil)
+	 return
+	}
+
+	f, errFile := file.Open()
+	if errFile != nil {
+		responses.APIResponse(ctx, 500, responses.StatusInternalError, nil)
+	}
+	defer f.Close()
+	result := u.userService.UploadAvatar(f)
+	responses.APIResponse(ctx, result.StatusCode, result.Message, result.Data)
+
+}

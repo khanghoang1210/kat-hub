@@ -1,6 +1,7 @@
 package services
 
 import (
+	"io"
 	"kathub/pkg/requests"
 	"kathub/pkg/responses"
 )
@@ -10,5 +11,5 @@ type UserService interface {
 	GetById(id uint)(*responses.ResponseData)
 	Create(user *requests.CreateUserReq) (*responses.ResponseData)
 	Update(user *requests.UpdateUserReq) (*responses.ResponseData)
-	UploadAvatar(bucketName string, fileName string, key string, prefix string) *responses.ResponseData
+	UploadAvatar(fileName io.Reader) *responses.ResponseData
 }

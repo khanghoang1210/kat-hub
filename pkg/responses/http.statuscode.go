@@ -9,5 +9,6 @@ const (
 	StatusUnAuthorize = "unauthorize"
 	StatusAuthorizeFail = "invalid username or password"
 	StatusNoData = "no data yet"
+	StatusInternalError = "server error"
 )
 

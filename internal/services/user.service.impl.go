@@ -1,6 +1,7 @@
 package services
 
 import (
+	"io"
 	"kathub/internal/repository"
 	"kathub/pkg/requests"
 	"kathub/pkg/responses"
@@ -132,11 +133,20 @@ func (us UserServiceImpl) Update(user *requests.UpdateUserReq) *responses.Respon
 	}
 }
 
-func (us UserServiceImpl) UploadAvatar(bucketName string, fileName string, key string, prefix string) *responses.ResponseData {
-	bucketName = "user-avatar"
+func (us UserServiceImpl) UploadAvatar(fileName io.Reader) *responses.ResponseData {
+	bucketName := "test"
+
+	err := us.storage.Upload(bucketName, fileName)
+	if err != nil {
+		return &responses.ResponseData{
+			StatusCode: http.StatusInternalServerError,
+			Message:    err.Error(),
+			Data:       false,
+		}
+	}
 	return &responses.ResponseData{
 		StatusCode: http.StatusCreated,
 		Message:    responses.StatusSuccess,
-		Data:       nil,
+		Data:       true,
 	}
 }
