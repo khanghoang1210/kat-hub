@@ -18,7 +18,10 @@ func NewStorageServiceImpl(storage *storage_go.Client) StorageService {
 // Upload implements UploadService.
 func (s *StorageServiceImpl) Upload(bucketName string, file io.Reader) error {
 
-	result, err := s.storage.UploadFile(bucketName,"choigem1.jpg",file)
+	 contentType := "image/jpeg"
+	result, err := s.storage.UploadFile(bucketName,"choigem1.jpg",file, storage_go.FileOptions{
+		ContentType: &contentType,
+	})
 	fmt.Println(s.storage.ListBuckets())
 	fmt.Println(result)
 	if err != nil {
