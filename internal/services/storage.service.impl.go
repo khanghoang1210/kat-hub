@@ -16,10 +16,10 @@ func NewStorageServiceImpl(storage *storage_go.Client) StorageService {
 }
 
 // Upload implements UploadService.
-func (s *StorageServiceImpl) Upload(bucketName string, file io.Reader) error {
+func (s *StorageServiceImpl) Upload(bucketName string, fileName string, data io.Reader, contentType string) error {
 
-	 contentType := "image/jpeg"
-	result, err := s.storage.UploadFile(bucketName,"choigem1.jpg",file, storage_go.FileOptions{
+	//contentType := "image/jpeg"
+	result, err := s.storage.UploadFile(bucketName,fileName,data, storage_go.FileOptions{
 		ContentType: &contentType,
 	})
 	fmt.Println(s.storage.ListBuckets())
@@ -29,4 +29,9 @@ func (s *StorageServiceImpl) Upload(bucketName string, file io.Reader) error {
 	}
 	
 	return nil
+}
+
+func (s *StorageServiceImpl) GetPublicUrl(bucketName string, fileName string) string{
+	result := s.storage.GetPublicUrl(bucketName, fileName)
+	return result.SignedURL
 }
