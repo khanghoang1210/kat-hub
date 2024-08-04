@@ -1,24 +1,29 @@
 package services
 
 import (
+	"fmt"
 	"io"
 	"kathub/internal/repository"
 	"kathub/pkg/requests"
 	"kathub/pkg/responses"
+	"mime"
 	"net/http"
+	"path/filepath"
+	"strconv"
+	"time"
 
 	"golang.org/x/crypto/bcrypt"
 )
 
 type UserServiceImpl struct {
 	userRepository repository.UserRepository
-	storage             StorageService
+	storage        StorageService
 }
 
 func NewUsersServiceImpl(repository repository.UserRepository, storage StorageService) UserService {
 	return &UserServiceImpl{
 		userRepository: repository,
-		storage:             storage,
+		storage:        storage,
 	}
 }
 
@@ -133,10 +138,16 @@ func (us UserServiceImpl) Update(user *requests.UpdateUserReq) *responses.Respon
 	}
 }
 
-func (us UserServiceImpl) UploadAvatar(fileName io.Reader) *responses.ResponseData {
-	bucketName := "test"
+func (us UserServiceImpl) UploadAvatar(currUser responses.UserResponse, data io.Reader, fileNameToUpload string) *responses.ResponseData {
+	bucketName := "user-avatar"
 
-	err := us.storage.Upload(bucketName, fileName)
+	extension := filepath.Ext(fileNameToUpload)
+
+	timestamp := strconv.FormatInt(time.Now().Unix(), 10)
+    fileName := currUser.UserName + "_" + timestamp + extension
+	contentType := mime.TypeByExtension(extension)
+
+	err := us.storage.Upload(bucketName, fileName, data, contentType)
 	if err != nil {
 		return &responses.ResponseData{
 			StatusCode: http.StatusInternalServerError,
@@ -144,9 +155,20 @@ func (us UserServiceImpl) UploadAvatar(fileName io.Reader) *responses.ResponseDa
 			Data:       false,
 		}
 	}
+	result := us.storage.GetPublicUrl(bucketName, fileName)
+	updatedAvatarRes, updateErr := us.userRepository.SaveAvatar(currUser, result) 
+	if updateErr != nil {
+		return &responses.ResponseData{
+			StatusCode: http.StatusInternalServerError,
+			Message:    updateErr.Error(),
+			Data:       false,
+		}
+	}
+	fmt.Println(result)
 	return &responses.ResponseData{
+
 		StatusCode: http.StatusCreated,
 		Message:    responses.StatusSuccess,
-		Data:       true,
+		Data:       updatedAvatarRes,
 	}
 }

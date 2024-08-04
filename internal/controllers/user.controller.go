@@ -4,6 +4,7 @@ import (
 	"kathub/internal/services"
 	"kathub/pkg/requests"
 	"kathub/pkg/responses"
+	"kathub/pkg/utils"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -87,6 +88,10 @@ func (u UserController) GetById(ctx *gin.Context){
 
 func (u UserController) UploadAvatar(ctx * gin.Context){
 	file, err := ctx.FormFile("avatar")
+	currentUser, getUserErr := utils.GetUserProfile(ctx)
+	if getUserErr != nil {
+		responses.APIResponse(ctx, 403, responses.StatusUnAuthorize, nil)
+	}
 	if err != nil {
 		responses.APIResponse(ctx, 400, responses.StatusParamInvalid, nil)
 	 return
@@ -97,7 +102,7 @@ func (u UserController) UploadAvatar(ctx * gin.Context){
 		responses.APIResponse(ctx, 500, responses.StatusInternalError, nil)
 	}
 	defer f.Close()
-	result := u.userService.UploadAvatar(f)
+	result := u.userService.UploadAvatar(*currentUser,f, file.Filename)
 	responses.APIResponse(ctx, result.StatusCode, result.Message, result.Data)
 
 }

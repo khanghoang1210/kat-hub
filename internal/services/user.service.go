@@ -11,5 +11,5 @@ type UserService interface {
 	GetById(id uint)(*responses.ResponseData)
 	Create(user *requests.CreateUserReq) (*responses.ResponseData)
 	Update(user *requests.UpdateUserReq) (*responses.ResponseData)
-	UploadAvatar(fileName io.Reader) *responses.ResponseData
+	UploadAvatar(currUser responses.UserResponse, data io.Reader, fileNameToUpload string) *responses.ResponseData
 }

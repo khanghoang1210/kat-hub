@@ -21,7 +21,7 @@ func NewRouter(userController *controllers.UserController, ac *controllers.Accou
 	userRouter.GET("/:id", userController.GetById)
 	userRouter.POST("", userController.Create)
 	userRouter.PUT("", userController.Update)
-	userRouter.POST("/uploadAvatar", userController.UploadAvatar)
+	userRouter.POST("/uploadAvatar",middlewares.AuthenMiddleware, userController.UploadAvatar)
 
 	accountRouter := baseRouter.Group("/accounts")
 	accountRouter.POST("/login", ac.Login)

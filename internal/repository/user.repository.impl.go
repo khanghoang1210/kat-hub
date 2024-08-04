@@ -18,6 +18,14 @@ func NewUsersRepositoryImpl(Db *gorm.DB) UserRepository {
 	return &UserRepositoryImpl{db: Db}
 }
 
+func (u *UserRepositoryImpl) SaveAvatar(currentUser responses.UserResponse,avatarUrl string) (bool, error) {
+	result := u.db.Model(&models.User{}).Where("id = ?", currentUser.Id).Update("avatar_url", avatarUrl)
+
+	if result.Error != nil {
+		return false, result.Error
+	}
+	return true, nil
+}
 func (u *UserRepositoryImpl) GetById(id uint) (*responses.UserResponse, error) {
 	var user models.User
 	res := u.db.First(&user, id)
