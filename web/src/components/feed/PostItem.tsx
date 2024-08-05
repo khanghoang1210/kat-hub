@@ -20,7 +20,7 @@ const PostItem: React.FC<PostItemProps> = ({
     <div className="p-3 bg-white-900 rounded-lg shadow w-5/12 left-[365px] top-32 relative mt-4">
       <div className="flex items-center mb-2 h-11">
         <Image
-          className="w-10 h-10 rounded-full border-2 border-black-300"
+          className="w-10 h-10 rounded-full border-1 border-black-300"
           src={userImage}
           alt={username}
           width={20}

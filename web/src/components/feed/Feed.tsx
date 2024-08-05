@@ -7,59 +7,46 @@ import { Constants } from "@/common/constants";
 import { Post } from "@/models/post";
 import { timeAgo } from "@/common/convertToTimeAgo";
 import { User } from "@/models/user";
+import { PostService } from "@/services/PostService";
+import UserService from "@/services/UserService";
 
 type FeedProps = {};
-const POST_ENDPOINT = "/posts";
 const USER_ENDPOINT = "/users";
 const Feed: React.FC<FeedProps> = () => {
   const [posts, setPosts] = useState<Post[]>([]);
-  const [currentUser, setCurrentUser] = useState<User>();
+  const [currentUser, setCurrentUser] = useState<User>(Object);
+
+
   useEffect(() => {
-    async function fetchData() {
+    const postService = new PostService();
+    const userService = new UserService();
+    const fetchPostData = async ()=>{
       try {
-        const res = await fetch(Constants.API_URL + POST_ENDPOINT, {
-          method: "GET",
-          mode: "cors",
-          headers: {
-            Accept: "application/json, text/plain",
-            "Content-Type": "application/json;charset=UTF-8",
-          },
-        });
+        const posts = await postService.getPosts()
+        setPosts(posts.data)
+      }
+      catch(error){
+        throw error
+      }
+    }
 
-        const data = await res.json();
-        setPosts(data.data);
+    const fetchUserData = async () => {
+      try {
+        const user = await userService.getUserByID(12)
+        setCurrentUser(user.data)
       } catch (error) {
         throw error;
       }
     }
-
-    async function fetchUserData() {
-      try {
-        const res = await fetch(Constants.API_URL + USER_ENDPOINT + "/12", {
-          method: "GET",
-          mode: "cors",
-          headers: {
-            Accept: "application/json, text/plain",
-            "Content-Type": "application/json;charset=UTF-8",
-          },
-        });
-
-        const data = await res.json();
-        console.log(data.data);
-        setCurrentUser(data.data);
-      } catch (error) {
-        throw error;
-      }
-    }
-    fetchData();
+    fetchPostData();
     fetchUserData();
   }, []);
 
   return (
     <div className="flex">
-      <Leftbar userName={currentUser?.userName} 
-        title={currentUser?.title}
-        avatarUrl={currentUser?.avatarUrl}
+      <Leftbar userName={currentUser.userName} 
+        title={currentUser.title}
+        avatarUrl={currentUser.avatarUrl}
       />
       <div className="flex-grow">
         <StatusBar />
@@ -73,7 +60,7 @@ const Feed: React.FC<FeedProps> = () => {
                 userTitle={post.author.title}
                 postTime={timeAgo(post.createdAt.toString())}
                 postContent={post.textContent}
-                userImage="/assets/icons/user.svg"
+                userImage={post.author.avatarUrl}
               />
             );
           })}

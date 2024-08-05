@@ -3,9 +3,9 @@ import Image from "next/image";
 import React from "react";
 
 type LeftbarProps = {
-  userName: string | undefined;
-  title: string | undefined;
-  avatarUrl: string | undefined;
+  userName: string;
+  title: string;
+  avatarUrl: string;
 };
 
 const Leftbar: React.FC<LeftbarProps> = ({userName, title, avatarUrl}) => {
@@ -21,11 +21,11 @@ const Leftbar: React.FC<LeftbarProps> = ({userName, title, avatarUrl}) => {
         />
         <div className="absolute top-16 left-4 ">
         <Image
-          src={"/assets/icons/user.svg"}
+          src={avatarUrl ? avatarUrl : "assets/icons/user.svg"}
           alt="avt"
           width={60}
           height={60}
-          className=" rounded-full border-2 border-black-300"
+          className=" rounded-full border-1 border-black-300"
         />
         </div>
         <div className="mt-10 ml-4">
