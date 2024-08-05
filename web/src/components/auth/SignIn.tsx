@@ -29,7 +29,7 @@ const SignIn: React.FC<SignInProps> = () => {
         if(authRes.statusCode == 200) {
             const token = authRes.data.accessToken;
             setCookie('token', token, { path: '/' })
-            window.location.href = '/'; 
+            router.push('/'); 
 
         }else if(authRes.statusCode != 200){
             alert("User name or password are wrong")
@@ -50,7 +50,7 @@ const SignIn: React.FC<SignInProps> = () => {
     border-2 outline-none sm:text-sm rounded-lg block w-full p-2.5
     bg-gray-600 border-white-400 placeholder-gray-400 text-white
 "
-          placeholder="Email"
+          placeholder="User Name"
         />
       </div>
       <div>

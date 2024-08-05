@@ -1,5 +1,8 @@
 import { authModalState } from "@/atoms/authModalAtom";
-import React from "react";
+import { SignUpReq } from "@/models/auth";
+import AuthenService from "@/services/AuthService";
+import { useRouter } from "next/router";
+import React, { useState } from "react";
 import { useSetRecoilState } from "recoil";
 
 type SignUpProps = {};
@@ -10,11 +13,36 @@ const SignUp: React.FC<SignUpProps> = () => {
     const handleClick = (type:"login"|"register"|"forgotPassword") =>{
         setAuthModalState((prev) =>({...prev, type}));
     }
+    const  [inputs, setInputs] = useState<SignUpReq>(Object)
+    const router = useRouter();
+    const handleChangeInput = (e:React.ChangeEvent<HTMLInputElement>)=>{
+        setInputs((prev) => ({...prev,[e.target.name]:e.target.value}));
+    }
+    const handleRegister = async (e:React.FormEvent<HTMLFormElement>)=>{
+        e.preventDefault();
+        if(!inputs.email || !inputs.userName ||!inputs.fullName || !inputs.password) return alert("Please fill all field");
+        console.log(inputs)
+        try{
+            const authService = new AuthenService();
+            const signUpRes = await authService.signUp(inputs);
+          
+            if (signUpRes.statusCode === 201) {
+              router.push("/auth");
+            }
+            if (signUpRes.statusCode !== 201) {
+              alert(signUpRes.message)
+            }
+        }
+        catch(error:any){
+            alert(error.message)
+        }
+    };
 
   return (
-    <form className=" space-y-6 px-7 pt-7 pb-4  w-[384px] h-[480px]">
+    <form className=" space-y-6 px-7 pt-7 pb-4  w-[384px] h-[480px]" onSubmit={handleRegister}>
       <div>
         <input
+          onChange={handleChangeInput}
           type="userName"
           name="userName"
           id="userName"
@@ -27,6 +55,7 @@ const SignUp: React.FC<SignUpProps> = () => {
       </div>
       <div>
         <input
+        onChange={handleChangeInput}
           type="email"
           name="email"
           id="email"
@@ -39,6 +68,7 @@ const SignUp: React.FC<SignUpProps> = () => {
       </div>
       <div>
         <input
+        onChange={handleChangeInput}
           type="fullName"
           name="fullName"
           id="fullName"
@@ -51,6 +81,7 @@ const SignUp: React.FC<SignUpProps> = () => {
       </div>
       <div>
         <input
+        onChange={handleChangeInput}
           type="password"
           name="password"
           id="password"
@@ -63,7 +94,8 @@ const SignUp: React.FC<SignUpProps> = () => {
       </div>
       <div>
         <input
-          type="confirmPassword"
+        onChange={handleChangeInput}
+          type="password"
           name="confirmPassword"
           id="confirmPassword"
           className="
@@ -84,7 +116,7 @@ const SignUp: React.FC<SignUpProps> = () => {
       </button>
       <div className="text-sm text-black-600 justify-center flex relative -mt-1">
         Have an account? &nbsp;{" "}
-        <a href="#" className="text-black-800 hover:underline font-medium"  onClick={()=>handleClick("login")}>
+        <a href="" className="text-black-800 hover:underline font-medium"  onClick={()=>handleClick("login")}>
           Log In
         </a>
       </div>
