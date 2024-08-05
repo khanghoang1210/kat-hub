@@ -1,18 +1,20 @@
 import Image from "next/image";
 import React from "react";
 
-type StatusBarProps = {};
+type StatusBarProps = {
+  avatarUrl: string;
+};
 
-const StatusBar: React.FC<StatusBarProps> = () => {
+const StatusBar: React.FC<StatusBarProps> = ({avatarUrl}) => {
   return (
     <div className=" left-[365px] w-5/12 h-28  rounded-lg absolute bg-white-900 p-4 mt-4 shadow text-black-600">
       <div className="flex items-center">
         <Image
-          src={"/assets/icons/user.svg"}
+          src={avatarUrl ? avatarUrl : "/assets/icons/user.svg" }
           alt="avt"
           width={40}
           height={40}
-          className=" rounded-full border-2 border-black-300"
+          className=" rounded-full border-1 border-black-300"
         />
         <input
           className="outline-none absolute border-b-2 border-white-400 top-3 right-8 w-4/5 h-12 text-black-300"

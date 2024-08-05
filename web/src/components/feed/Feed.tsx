@@ -49,7 +49,7 @@ const Feed: React.FC<FeedProps> = () => {
         avatarUrl={currentUser.avatarUrl}
       />
       <div className="flex-grow">
-        <StatusBar />
+        <StatusBar avatarUrl={currentUser.avatarUrl}/>
         <FriendItem />
         <div>
           {posts.map((post, idx) => {

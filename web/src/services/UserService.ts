@@ -1,11 +1,11 @@
 import { Constants } from "@/common/constants";
 
-const USER_ENDPOINT = "/users";
+
 export default class UserService {
   constructor() {}
   async getUserByID(id: number) {
     try {
-      const res = await fetch(Constants.API_URL + USER_ENDPOINT + "/12", {
+      const res = await fetch(Constants.API_URL + Constants.USER_ENDPOINT +`/${id}`, {
         method: "GET",
         mode: "cors",
         headers: {

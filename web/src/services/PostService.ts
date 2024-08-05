@@ -1,13 +1,12 @@
 import { Constants } from "@/common/constants";
 
-const POST_ENDPOINT = "/posts";
 export class PostService {
     constructor(){
        
     }
     async getPosts(){
         try {
-            const res = await fetch(Constants.API_URL + POST_ENDPOINT, {
+            const res = await fetch(Constants.API_URL + Constants.POST_ENDPOINT, {
               method: "GET",
               mode: "cors",
               headers: {
