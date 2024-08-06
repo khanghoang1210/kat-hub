@@ -12,4 +12,6 @@ type PostRepository interface {
 	GetById(id uint) (*responses.PostResponse, error)
 	Update(req *requests.CreatePostReq, id uint) (bool, error)
 	Delete(id uint) (bool, error)
+	Like(id uint, user responses.UserResponse)(bool, error)
+	UnLike(id uint, user responses.UserResponse)(bool, error)
 }

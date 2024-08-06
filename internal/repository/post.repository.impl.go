@@ -124,3 +124,11 @@ func (p *PostRepositoryImpl) GetById(id uint) (*responses.PostResponse, error){
 	}
 	return result, nil
 }
+
+func(p *PostRepositoryImpl) Like(id uint, user responses.UserResponse)(bool, error){
+	return true, nil
+}
+
+func(p *PostRepositoryImpl) UnLike(id uint, user responses.UserResponse)(bool, error){
+	return true, nil
+}

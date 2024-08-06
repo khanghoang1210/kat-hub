@@ -11,4 +11,6 @@ type Post struct {
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 	User        User `gorm:"foreignKey:UserId"`
+	Likes       []Like    `gorm:"foreignKey:PostId"`
+	Comments    []Comment `gorm:"foreignKey:PostId"`
 }
