@@ -1,14 +1,9 @@
 package main
 
 import (
-	"fmt"
 	_ "kathub/docs"
-	"kathub/internal/controllers"
-	"kathub/internal/database"
-	"kathub/internal/initialize"
-	"kathub/internal/repository"
 	"kathub/internal/routers"
-	"kathub/internal/services"
+	"kathub/internal/wire"
 )
 
 // @title   Kathub API
@@ -18,28 +13,16 @@ import (
 // @host 	localhost:8080
 // @BasePath /api/v1
 func main() {
-	//init db
-	database.DatabaseConnection()
-	fmt.Println(database.DB.Name())
-	
-	initialize.CreateSession()
-	storageService := services.NewStorageServiceImpl(initialize.StorageClient)
-
 
 	// initial user instance
-	userRepo := repository.NewUsersRepositoryImpl(database.DB)
-	userService := services.NewUsersServiceImpl(userRepo, storageService)
-	userController := controllers.NewUserController(userService)
+	uc := wire.InitUserRouterHandler()
 
 	// initial account instance
-	ar := repository.NewAccountRepositoryImpl(database.DB)
-	as := services.NewAccountServiceImpl(ar)
-	ac := controllers.NewAccountController(as)
-	// initial account instance
-	pr := repository.NewPostRepositoryImpl(database.DB)
-	ps := services.NewPostServiceImpl(pr)
-	pc := controllers.NewPostController(ps)
+	ac := wire.InitAccountRouterHandler()
 
-	r := routers.NewRouter(userController, ac, pc)
+	// initial account instance
+	pc := wire.InitPostRouterHandler()
+
+	r := routers.NewRouter(uc, ac, pc)
 	r.Run()
 }

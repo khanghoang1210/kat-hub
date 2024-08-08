@@ -11,7 +11,7 @@ import (
 
 var DB *gorm.DB
 
-func DatabaseConnection() {
+func DatabaseConnection() (*gorm.DB)  {
 	var err error
 	sqlInfo := os.Getenv("CONN_STRING")
 	DB, err = gorm.Open(postgres.Open(sqlInfo), &gorm.Config{
@@ -20,10 +20,7 @@ func DatabaseConnection() {
 	if err != nil {
 		panic("failed to connect to database")
 	}
-	// sqlDB, _ := DB.DB()
-	// sqlDB.SetConnMaxIdleTime(time.Duration(10))
-	// sqlDB.SetMaxOpenConns(100)
-	// sqlDB.SetConnMaxLifetime(time.Duration(3600))
+	return DB
 }
 
 
