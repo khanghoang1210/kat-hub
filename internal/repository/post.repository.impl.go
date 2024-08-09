@@ -142,10 +142,25 @@ func (p *PostRepositoryImpl) InsertPostImage(postID int, imageUrl string) (bool,
 	return true, nil
 }
 
-func (p *PostRepositoryImpl) Like(id uint, user responses.UserResponse) (bool, error) {
+func (p *PostRepositoryImpl) Like(postID int, user responses.UserResponse) (bool, error) {
+	like := &models.Like{
+		UserId: user.Id,
+		PostId: uint(postID),
+	}
+
+	result := p.db.Create(like)
+
+	if result.Error != nil {
+		return true, result.Error
+	}
+	
 	return true, nil
 }
 
-func (p *PostRepositoryImpl) UnLike(id uint, user responses.UserResponse) (bool, error) {
+func (p *PostRepositoryImpl) UnLike(postID int, user responses.UserResponse) (bool, error) {
+	res := p.db.Where("user_id", user.Id).Where("post_id", postID).Delete(&models.Like{})
+	if res.Error != nil {
+		return false, res.Error
+	}
 	return true, nil
 }

@@ -30,7 +30,7 @@ func NewPostController(service services.PostService) *PostController {
 func (pc PostController) Create(ctx *gin.Context) {
 	newPost := requests.CreatePostReq{}
 	currentUser, err := utils.GetUserProfile(ctx)
-	
+
 	if err != nil {
 		responses.APIResponse(ctx, 401, responses.StatusUnAuthorize, nil)
 	}
@@ -39,18 +39,17 @@ func (pc PostController) Create(ctx *gin.Context) {
 		responses.APIResponse(ctx, 400, responses.StatusParamInvalid, nil)
 		return
 	}
-	
 
 	result := pc.postService.Create(&newPost, *currentUser)
 	responses.APIResponse(ctx, result.StatusCode, result.Message, result.Data)
 
 }
 
-func(pc PostController) UploadPostImage(ctx *gin.Context) {
+func (pc PostController) UploadPostImage(ctx *gin.Context) {
 	file, fileErr := ctx.FormFile("imageContent")
 	if fileErr != nil {
 		responses.APIResponse(ctx, 400, responses.StatusParamInvalid, nil)
-	 	return
+		return
 	}
 
 	id, errParse := strconv.Atoi(ctx.Param("id"))
@@ -59,7 +58,7 @@ func(pc PostController) UploadPostImage(ctx *gin.Context) {
 		return
 	}
 	currentUser, err := utils.GetUserProfile(ctx)
-	
+
 	if err != nil {
 		responses.APIResponse(ctx, 401, responses.StatusUnAuthorize, nil)
 	}
@@ -115,7 +114,7 @@ func (pc PostController) Update(ctx *gin.Context) {
 func (pc PostController) Delete(ctx *gin.Context) {
 	id, errParse := strconv.Atoi(ctx.Param("id"))
 
-	if  errParse != nil {
+	if errParse != nil {
 		responses.APIResponse(ctx, 400, responses.StatusParamInvalid, nil)
 		return
 	}
@@ -133,12 +132,33 @@ func (pc PostController) Delete(ctx *gin.Context) {
 func (pc PostController) GetById(ctx *gin.Context) {
 
 	id, errParse := strconv.Atoi(ctx.Param("id"))
-	if  errParse != nil {
+	if errParse != nil {
 		responses.APIResponse(ctx, 400, responses.StatusParamInvalid, nil)
 		return
 	}
 
-
 	result := pc.postService.GetById(uint(id))
+	responses.APIResponse(ctx, result.StatusCode, result.Message, result.Data)
+}
+
+func (pc PostController) Like(ctx *gin.Context) {
+	currentUser, err := utils.GetUserProfile(ctx)
+	postID, errParse := strconv.Atoi(ctx.Param("id"))
+	if errParse != nil || err != nil {
+		responses.APIResponse(ctx, 400, responses.StatusParamInvalid, nil)
+		return
+	}
+	result := pc.postService.Like(postID, *currentUser)
+	responses.APIResponse(ctx, result.StatusCode, result.Message, result.Data)
+}
+
+func (pc PostController) UnLike(ctx *gin.Context) {
+	currentUser, err := utils.GetUserProfile(ctx)
+	postID, errParse := strconv.Atoi(ctx.Param("id"))
+	if errParse != nil || err != nil {
+		responses.APIResponse(ctx, 400, responses.StatusParamInvalid, nil)
+		return
+	}
+	result := pc.postService.UnLike(postID, *currentUser)
 	responses.APIResponse(ctx, result.StatusCode, result.Message, result.Data)
 }

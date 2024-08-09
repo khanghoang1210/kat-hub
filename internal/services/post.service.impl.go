@@ -164,3 +164,37 @@ func (p *PostServiceImpl) GetById(id uint) *responses.ResponseData {
 		Data:       result,
 	}
 }
+
+func (p *PostServiceImpl) Like(postID int, currentUser responses.UserResponse) *responses.ResponseData {
+	result, err := p.postRepo.Like(postID, currentUser)
+
+	if err != nil {
+		return &responses.ResponseData{
+			StatusCode: http.StatusInternalServerError,
+			Message:    err.Error(),
+			Data:       false,
+		}
+	}
+	return &responses.ResponseData{
+		StatusCode: http.StatusOK,
+		Message:    responses.StatusSuccess,
+		Data:       result,
+	}
+}
+
+func (p *PostServiceImpl) UnLike(postID int, currentUser responses.UserResponse) *responses.ResponseData {
+	result, err := p.postRepo.UnLike(postID, currentUser)
+
+	if err != nil {
+		return &responses.ResponseData{
+			StatusCode: http.StatusInternalServerError,
+			Message:    err.Error(),
+			Data:       false,
+		}
+	}
+	return &responses.ResponseData{
+		StatusCode: http.StatusOK,
+		Message:    responses.StatusSuccess,
+		Data:       result,
+	}
+}

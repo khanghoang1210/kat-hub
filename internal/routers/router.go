@@ -33,6 +33,8 @@ func NewRouter(userController *controllers.UserController, ac *controllers.Accou
 	postRouter.PUT("/:id", middlewares.AuthenMiddleware, pc.Update)
 	postRouter.DELETE("/:id", middlewares.AuthenMiddleware, pc.Delete)
 	postRouter.POST("/uploadPostImage/:id", middlewares.AuthenMiddleware, pc.UploadPostImage)
+	postRouter.POST("/like/:id", middlewares.AuthenMiddleware, pc.Like)
+	postRouter.DELETE("/unlike/:id", middlewares.AuthenMiddleware, pc.UnLike)
 
 	return r
 }
