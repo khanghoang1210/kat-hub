@@ -29,7 +29,6 @@ func NewPostController(service services.PostService) *PostController {
 // @Router			/posts [post]
 func (pc PostController) Create(ctx *gin.Context) {
 	newPost := requests.CreatePostReq{}
-
 	currentUser, err := utils.GetUserProfile(ctx)
 	if err != nil {
 		responses.APIResponse(ctx, 401, responses.StatusUnAuthorize, nil)
@@ -39,8 +38,18 @@ func (pc PostController) Create(ctx *gin.Context) {
 		responses.APIResponse(ctx, 400, responses.StatusParamInvalid, nil)
 		return
 	}
+	file, fileErr := ctx.FormFile("imageContent")
+	if fileErr != nil {
+		responses.APIResponse(ctx, 400, responses.StatusParamInvalid, nil)
+	 return
+	}
+	f, errFile := file.Open()
+	if errFile != nil {
+		responses.APIResponse(ctx, 500, responses.StatusInternalError, nil)
+	}
+	defer f.Close()
 
-	result := pc.postService.Create(&newPost, currentUser.Id)
+	result := pc.postService.Create(&newPost, *currentUser, f, file.Filename)
 	responses.APIResponse(ctx, result.StatusCode, result.Message, result.Data)
 
 }
@@ -102,12 +111,14 @@ func (pc PostController) Delete(ctx *gin.Context) {
 // @Success      	200 {object}  responses.ResponseData
 // @Router			/posts/{id} [get]
 func (pc PostController) GetById(ctx *gin.Context) {
-	id, errParse := strconv.Atoi(ctx.Param("id"))
 
+	id, errParse := strconv.Atoi(ctx.Param("id"))
 	if  errParse != nil {
 		responses.APIResponse(ctx, 400, responses.StatusParamInvalid, nil)
 		return
 	}
+
+
 	result := pc.postService.GetById(uint(id))
 	responses.APIResponse(ctx, result.StatusCode, result.Message, result.Data)
 }

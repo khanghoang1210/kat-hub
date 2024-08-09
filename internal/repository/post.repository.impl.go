@@ -18,10 +18,10 @@ func NewPostRepositoryImpl(db *gorm.DB) PostRepository {
 }
 
 // Create implements PostRepository.
-func (p *PostRepositoryImpl) Create(req *requests.CreatePostReq, currentUser uint) (bool, error) {
+func (p *PostRepositoryImpl) Create(req *requests.CreatePostReq, currentUser responses.UserResponse) (bool, error) {
 	post := &models.Post{
 		TextContent: req.TextContent,
-		UserId:      currentUser,
+		UserId:      currentUser.Id,
 	}
 	result := p.db.Create(post)
 
@@ -39,18 +39,18 @@ func (p *PostRepositoryImpl) GetAll() ([]*responses.PostResponse, error) {
 	var result []*responses.PostResponse
 
 	for _, v := range posts {
-		
+
 		post := &responses.PostResponse{
-			Id:        v.Id,
-			TextContent:  v.TextContent,
+			Id:          v.Id,
+			TextContent: v.TextContent,
 			Author: responses.UserResponse{
-				Id: v.UserId,
-				UserName: v.User.UserName,
-				FullName: v.User.FullName,
-				Email: v.User.Email,
-				Title: v.User.Title,
+				Id:        v.UserId,
+				UserName:  v.User.UserName,
+				FullName:  v.User.FullName,
+				Email:     v.User.Email,
+				Title:     v.User.Title,
 				AvatarUrl: v.User.AvatarUrl,
-				Gender: v.User.Gender,
+				Gender:    v.User.Gender,
 				CreatedAt: v.User.CreatedAt,
 			},
 			CreatedAt: v.CreatedAt,
@@ -86,7 +86,7 @@ func (p *PostRepositoryImpl) Update(req *requests.CreatePostReq, id uint) (bool,
 	return true, nil
 }
 
-func (p * PostRepositoryImpl)Delete(id uint) (bool, error){
+func (p *PostRepositoryImpl) Delete(id uint) (bool, error) {
 	res := p.db.Delete(&models.Post{}, id)
 
 	if res.Error != nil {
@@ -95,7 +95,7 @@ func (p * PostRepositoryImpl)Delete(id uint) (bool, error){
 	return true, nil
 }
 
-func (p *PostRepositoryImpl) GetById(id uint) (*responses.PostResponse, error){
+func (p *PostRepositoryImpl) GetById(id uint) (*responses.PostResponse, error) {
 	var post models.Post
 	res := p.db.Preload("User").First(&post, id)
 	if res.Error != nil {
@@ -107,16 +107,16 @@ func (p *PostRepositoryImpl) GetById(id uint) (*responses.PostResponse, error){
 		return nil, res.Error
 	}
 	result := &responses.PostResponse{
-		Id:        post.Id,
+		Id:          post.Id,
 		TextContent: post.TextContent,
 		Author: responses.UserResponse{
-			Id: post.UserId,
-			UserName: post.User.UserName,
-			FullName: post.User.FullName,
-			Email: post.User.Email,
-			Title: post.User.Title,
+			Id:        post.UserId,
+			UserName:  post.User.UserName,
+			FullName:  post.User.FullName,
+			Email:     post.User.Email,
+			Title:     post.User.Title,
 			AvatarUrl: post.User.AvatarUrl,
-			Gender: post.User.Gender,
+			Gender:    post.User.Gender,
 			CreatedAt: post.User.CreatedAt,
 		},
 		CreatedAt: post.CreatedAt,
@@ -125,10 +125,19 @@ func (p *PostRepositoryImpl) GetById(id uint) (*responses.PostResponse, error){
 	return result, nil
 }
 
-func(p *PostRepositoryImpl) Like(id uint, user responses.UserResponse)(bool, error){
+func (p *PostRepositoryImpl) InsertPostImage(postID uint, imageUrl string) (bool, error) {
+	result := p.db.Model(&models.Post{}).Where("id = ?", postID).Update("imageContent", imageUrl)
+
+	if result.Error != nil {
+		return false, result.Error
+	}
 	return true, nil
 }
 
-func(p *PostRepositoryImpl) UnLike(id uint, user responses.UserResponse)(bool, error){
+func (p *PostRepositoryImpl) Like(id uint, user responses.UserResponse) (bool, error) {
+	return true, nil
+}
+
+func (p *PostRepositoryImpl) UnLike(id uint, user responses.UserResponse) (bool, error) {
 	return true, nil
 }

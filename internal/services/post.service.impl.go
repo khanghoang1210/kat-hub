@@ -1,20 +1,29 @@
 package services
 
 import (
+	"io"
 	"kathub/internal/repository"
 	"kathub/pkg/requests"
 	"kathub/pkg/responses"
+	"mime"
 	"net/http"
+	"path/filepath"
+	"strconv"
+	"time"
 )
 
 type PostServiceImpl struct {
 	postRepo repository.PostRepository
+	storage StorageService
 }
 
 
 
-func NewPostServiceImpl(repo repository.PostRepository) PostService {
-	return &PostServiceImpl{postRepo: repo}
+func NewPostServiceImpl(repo repository.PostRepository, storage StorageService) PostService {
+	return &PostServiceImpl{
+		postRepo: repo,
+		storage: storage,
+	}
 }
 
 // GetAll implements PostService.
@@ -44,8 +53,25 @@ func (p *PostServiceImpl) GetAll() *responses.ResponseData {
 }
 
 // Create implements PostService.
-func (p *PostServiceImpl) Create(req *requests.CreatePostReq, currentUser uint) *responses.ResponseData {
+func (p *PostServiceImpl) Create(req *requests.CreatePostReq, currentUser responses.UserResponse, data io.Reader, fileNameToUpload string) *responses.ResponseData {
+	bucketName := "post-images"
 
+	extension := filepath.Ext(fileNameToUpload)
+
+	timestamp := strconv.FormatInt(time.Now().Unix(), 10)
+    fileName := currentUser.UserName + "_" + timestamp + extension
+	contentType := mime.TypeByExtension(extension)
+
+	err := p.storage.Upload(bucketName, fileName, data, contentType)
+	if err != nil {
+		return &responses.ResponseData{
+			StatusCode: http.StatusInternalServerError,
+			Message:    err.Error(),
+			Data:       false,
+		}
+	}
+	imageUrl := p.storage.GetPublicUrl(bucketName, fileName)
+	req.ImageContent = imageUrl 
 	result, err := p.postRepo.Create(req, currentUser)
 
 	if err != nil {
