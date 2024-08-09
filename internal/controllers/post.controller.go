@@ -30,6 +30,7 @@ func NewPostController(service services.PostService) *PostController {
 func (pc PostController) Create(ctx *gin.Context) {
 	newPost := requests.CreatePostReq{}
 	currentUser, err := utils.GetUserProfile(ctx)
+	
 	if err != nil {
 		responses.APIResponse(ctx, 401, responses.StatusUnAuthorize, nil)
 	}
@@ -38,20 +39,39 @@ func (pc PostController) Create(ctx *gin.Context) {
 		responses.APIResponse(ctx, 400, responses.StatusParamInvalid, nil)
 		return
 	}
+	
+
+	result := pc.postService.Create(&newPost, *currentUser)
+	responses.APIResponse(ctx, result.StatusCode, result.Message, result.Data)
+
+}
+
+func(pc PostController) UploadPostImage(ctx *gin.Context) {
 	file, fileErr := ctx.FormFile("imageContent")
 	if fileErr != nil {
 		responses.APIResponse(ctx, 400, responses.StatusParamInvalid, nil)
-	 return
+	 	return
 	}
+
+	id, errParse := strconv.Atoi(ctx.Param("id"))
+	if errParse != nil {
+		responses.APIResponse(ctx, 400, responses.StatusParamInvalid, nil)
+		return
+	}
+	currentUser, err := utils.GetUserProfile(ctx)
+	
+	if err != nil {
+		responses.APIResponse(ctx, 401, responses.StatusUnAuthorize, nil)
+	}
+
 	f, errFile := file.Open()
 	if errFile != nil {
 		responses.APIResponse(ctx, 500, responses.StatusInternalError, nil)
 	}
 	defer f.Close()
 
-	result := pc.postService.Create(&newPost, *currentUser, f, file.Filename)
+	result := pc.postService.UploadPostImage(id, *currentUser, f, file.Filename)
 	responses.APIResponse(ctx, result.StatusCode, result.Message, result.Data)
-
 }
 
 // GetAll		 	godoc

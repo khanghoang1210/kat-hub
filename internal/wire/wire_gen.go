@@ -29,7 +29,9 @@ func InitAccountRouterHandler() *controllers.AccountController {
 func InitPostRouterHandler() *controllers.PostController {
 	db := database.DatabaseConnection()
 	postRepository := repository.NewPostRepositoryImpl(db)
-	postService := services.NewPostServiceImpl(postRepository)
+	client := initialize.CreateSession()
+	storageService := services.NewStorageServiceImpl(client)
+	postService := services.NewPostServiceImpl(postRepository, storageService)
 	postController := controllers.NewPostController(postService)
 	return postController
 }

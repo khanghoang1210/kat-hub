@@ -5,7 +5,6 @@ import (
 	"kathub/internal/models"
 	"kathub/pkg/requests"
 	"kathub/pkg/responses"
-
 	"gorm.io/gorm"
 )
 
@@ -18,7 +17,7 @@ func NewPostRepositoryImpl(db *gorm.DB) PostRepository {
 }
 
 // Create implements PostRepository.
-func (p *PostRepositoryImpl) Create(req *requests.CreatePostReq, currentUser responses.UserResponse) (bool, error) {
+func (p *PostRepositoryImpl) Create(req *requests.CreatePostReq, currentUser responses.UserResponse) (*uint, error) {
 	post := &models.Post{
 		TextContent: req.TextContent,
 		UserId:      currentUser.Id,
@@ -26,9 +25,9 @@ func (p *PostRepositoryImpl) Create(req *requests.CreatePostReq, currentUser res
 	result := p.db.Create(post)
 
 	if result.Error != nil {
-		return false, result.Error
+		return nil, result.Error
 	}
-	return true, nil
+	return &post.Id, nil
 }
 
 // GetAll implements PostRepository.
@@ -43,6 +42,7 @@ func (p *PostRepositoryImpl) GetAll() ([]*responses.PostResponse, error) {
 		post := &responses.PostResponse{
 			Id:          v.Id,
 			TextContent: v.TextContent,
+			ImageContent: v.ImageContent,
 			Author: responses.UserResponse{
 				Id:        v.UserId,
 				UserName:  v.User.UserName,
@@ -125,8 +125,16 @@ func (p *PostRepositoryImpl) GetById(id uint) (*responses.PostResponse, error) {
 	return result, nil
 }
 
-func (p *PostRepositoryImpl) InsertPostImage(postID uint, imageUrl string) (bool, error) {
-	result := p.db.Model(&models.Post{}).Where("id = ?", postID).Update("imageContent", imageUrl)
+func (p *PostRepositoryImpl) InsertPostImage(postID int, imageUrl string) (bool, error) {
+	var post models.Post
+	if err := p.db.Where("id = ?", postID).First(&post).Error; err != nil {
+		return false, err
+	}
+
+	//post.ImageContent = append(post.ImageContent, imageUrl)
+	//imageContentArray := pq.Array(post.ImageContent)
+
+	result := p.db.Model(&models.Post{}).Where("id = ?", postID).Update("image_content", post.ImageContent)
 
 	if result.Error != nil {
 		return false, result.Error

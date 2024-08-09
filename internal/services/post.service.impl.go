@@ -14,15 +14,13 @@ import (
 
 type PostServiceImpl struct {
 	postRepo repository.PostRepository
-	storage StorageService
+	storage  StorageService
 }
-
-
 
 func NewPostServiceImpl(repo repository.PostRepository, storage StorageService) PostService {
 	return &PostServiceImpl{
 		postRepo: repo,
-		storage: storage,
+		storage:  storage,
 	}
 }
 
@@ -53,13 +51,29 @@ func (p *PostServiceImpl) GetAll() *responses.ResponseData {
 }
 
 // Create implements PostService.
-func (p *PostServiceImpl) Create(req *requests.CreatePostReq, currentUser responses.UserResponse, data io.Reader, fileNameToUpload string) *responses.ResponseData {
-	bucketName := "post-images"
+func (p *PostServiceImpl) Create(req *requests.CreatePostReq, currentUser responses.UserResponse) *responses.ResponseData {
+	createdPostID, err := p.postRepo.Create(req, currentUser)
+	if err != nil {
+		return &responses.ResponseData{
+			StatusCode: http.StatusInternalServerError,
+			Message:    err.Error(),
+			Data:       nil,
+		}
+	}
 
+	return &responses.ResponseData{
+		StatusCode: http.StatusCreated,
+		Message:    responses.StatusSuccess,
+		Data:       createdPostID,
+	}
+}
+
+func (p *PostServiceImpl) UploadPostImage(postID int, currentUser responses.UserResponse, data io.Reader, fileNameToUpload string) *responses.ResponseData {
+	bucketName := "posts-image"
 	extension := filepath.Ext(fileNameToUpload)
 
 	timestamp := strconv.FormatInt(time.Now().Unix(), 10)
-    fileName := currentUser.UserName + "_" + timestamp + extension
+	fileName := "post" + "-" + strconv.Itoa(postID) + "-" + currentUser.UserName + "_" + timestamp + extension
 	contentType := mime.TypeByExtension(extension)
 
 	err := p.storage.Upload(bucketName, fileName, data, contentType)
@@ -71,26 +85,26 @@ func (p *PostServiceImpl) Create(req *requests.CreatePostReq, currentUser respon
 		}
 	}
 	imageUrl := p.storage.GetPublicUrl(bucketName, fileName)
-	req.ImageContent = imageUrl 
-	result, err := p.postRepo.Create(req, currentUser)
 
-	if err != nil {
+	result, insertImageErr := p.postRepo.InsertPostImage(postID, imageUrl)
+	if insertImageErr != nil {
 		return &responses.ResponseData{
 			StatusCode: http.StatusInternalServerError,
-			Message:    err.Error(),
+			Message:    insertImageErr.Error(),
 			Data:       false,
 		}
 	}
 
 	return &responses.ResponseData{
-		StatusCode: http.StatusCreated,
+		StatusCode: http.StatusOK,
 		Message:    responses.StatusSuccess,
 		Data:       result,
 	}
 }
+
 // Update implements PostService.
 func (p *PostServiceImpl) Update(req *requests.CreatePostReq, id uint) *responses.ResponseData {
-	result, err := p.postRepo.Update(req,id)
+	result, err := p.postRepo.Update(req, id)
 	if err != nil {
 		return &responses.ResponseData{
 			StatusCode: http.StatusInternalServerError,
@@ -110,7 +124,7 @@ func (p *PostServiceImpl) Delete(id uint) *responses.ResponseData {
 	result, err := p.postRepo.Delete(id)
 
 	if err != nil {
-		
+
 		return &responses.ResponseData{
 			StatusCode: http.StatusInternalServerError,
 			Message:    err.Error(),

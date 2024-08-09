@@ -7,9 +7,10 @@ import (
 )
 
 type PostService interface {
-	Create(req *requests.CreatePostReq, currentUser responses.UserResponse,data io.Reader, fileNameToUpload string) *responses.ResponseData
+	Create(req *requests.CreatePostReq, currentUser responses.UserResponse) *responses.ResponseData
 	GetAll() *responses.ResponseData
 	GetById(id uint) *responses.ResponseData
 	Update(req *requests.CreatePostReq, id uint) *responses.ResponseData
 	Delete(id uint) *responses.ResponseData
+	UploadPostImage(postID int,currentUser responses.UserResponse, data io.Reader, fileNameToUpload string) *responses.ResponseData
 }
