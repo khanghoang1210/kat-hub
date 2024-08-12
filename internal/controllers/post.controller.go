@@ -176,8 +176,15 @@ func(pc PostController) CreateComment(ctx *gin.Context) {
 	responses.APIResponse(ctx, result.StatusCode, result.Message, result.Data)
 }
 
-func (pc PostController) GetComments(ctx *gin.Context){
+func (pc PostController) GetCommentsByPostID(ctx *gin.Context){
+	postID, errParse := strconv.Atoi(ctx.Param("id"))
+	if errParse != nil {
+		responses.APIResponse(ctx, 400, responses.StatusParamInvalid, nil)
+		return
+	}
 
+	result := pc.postService.GetCommentsByPostID(postID)
+	responses.APIResponse(ctx, result.StatusCode, result.Message, result.Data)
 }
 
 func (pc PostController) EditComment(ctx *gin.Context){

@@ -16,4 +16,5 @@ type PostRepository interface {
 	Like(postID int, user responses.UserResponse)(bool, error)
 	UnLike(postID int, user responses.UserResponse)(bool, error)
 	InsertComment(req *requests.CreateCommentReq, currentUser responses.UserResponse) (bool, error)
+	GetAllComment(postID int) ([]*responses.CommentResponse, error)
 }

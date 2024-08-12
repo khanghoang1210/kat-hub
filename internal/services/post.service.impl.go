@@ -215,3 +215,28 @@ func (p *PostServiceImpl) CreateComment(req *requests.CreateCommentReq, currentU
 		Data:       result,
 	}
 }
+
+func (p *PostServiceImpl) 	GetCommentsByPostID(postID int) *responses.ResponseData {
+	result, err := p.postRepo.GetAllComment(postID)
+
+	if err != nil {
+		if err.Error() == responses.StatusResourceNotFound {
+			return &responses.ResponseData{
+				StatusCode: http.StatusNoContent,
+				Message:    err.Error(),
+				Data:       false,
+			}
+		}
+		return &responses.ResponseData{
+			StatusCode: http.StatusInternalServerError,
+			Message:    err.Error(),
+			Data:       false,
+		}
+	}
+
+	return &responses.ResponseData{
+		StatusCode: http.StatusOK,
+		Message:    responses.StatusSuccess,
+		Data:       result,
+	}
+}

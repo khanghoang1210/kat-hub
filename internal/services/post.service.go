@@ -16,4 +16,5 @@ type PostService interface {
 	Like(postID int, currentUser responses.UserResponse) *responses.ResponseData
 	UnLike(postID int, currentUser responses.UserResponse) *responses.ResponseData
 	CreateComment(req *requests.CreateCommentReq, currentUser responses.UserResponse) *responses.ResponseData
+	GetCommentsByPostID(postID int) *responses.ResponseData
 }

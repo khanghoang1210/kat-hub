@@ -178,3 +178,37 @@ func (p *PostRepositoryImpl) InsertComment(req *requests.CreateCommentReq, curre
 	}
 	return true, nil
 }
+
+func (p *PostRepositoryImpl) GetAllComment(postID int) ([]*responses.CommentResponse, error) {
+	comments := []*models.Comment{}
+
+	res := p.db.Preload("User").Order("created_at DESC").Where("post_id", postID).Find(&comments)
+	var result []*responses.CommentResponse
+
+	for _, v := range comments {
+
+		comment := &responses.CommentResponse{
+			Id:          v.Id,
+			Content: v.Content,
+			
+			Author: responses.UserResponse{
+				Id:        v.UserId,
+				UserName:  v.User.UserName,
+				FullName:  v.User.FullName,
+				Email:     v.User.Email,
+				Title:     v.User.Title,
+				AvatarUrl: v.User.AvatarUrl,
+				Gender:    v.User.Gender,
+				CreatedAt: v.User.CreatedAt,
+			},
+			CreatedAt: v.CreatedAt,
+		//	UpdatedAt: v.UpdatedAt,
+		}
+		result = append(result, comment)
+	}
+
+	if res.Error != nil {
+		return nil, res.Error
+	}
+	return result, nil
+}
