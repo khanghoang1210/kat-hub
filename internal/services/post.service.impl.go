@@ -198,3 +198,20 @@ func (p *PostServiceImpl) UnLike(postID int, currentUser responses.UserResponse)
 		Data:       result,
 	}
 }
+
+func (p *PostServiceImpl) CreateComment(req *requests.CreateCommentReq, currentUser responses.UserResponse) *responses.ResponseData {
+	result, err := p.postRepo.InsertComment(req, currentUser)
+
+	if err != nil {
+		return &responses.ResponseData{
+			StatusCode: http.StatusInternalServerError,
+			Message:    err.Error(),
+			Data:       false,
+		}
+	}
+	return &responses.ResponseData{
+		StatusCode: http.StatusOK,
+		Message:    responses.StatusSuccess,
+		Data:       result,
+	}
+}

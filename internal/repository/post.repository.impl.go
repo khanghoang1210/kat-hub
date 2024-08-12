@@ -164,3 +164,17 @@ func (p *PostRepositoryImpl) UnLike(postID int, user responses.UserResponse) (bo
 	}
 	return true, nil
 }
+
+func (p *PostRepositoryImpl) InsertComment(req *requests.CreateCommentReq, currentUser responses.UserResponse) (bool, error) {
+	comment := &models.Comment{
+		PostId: uint(req.PostID),
+		UserId:      currentUser.Id,
+		Content: req.Content,
+	}
+	result := p.db.Create(comment)
+
+	if result.Error != nil {
+		return false, result.Error
+	}
+	return true, nil
+}

@@ -15,4 +15,5 @@ type PostRepository interface {
 	InsertPostImage(postID int, imageUrl string) (bool, error)
 	Like(postID int, user responses.UserResponse)(bool, error)
 	UnLike(postID int, user responses.UserResponse)(bool, error)
+	InsertComment(req *requests.CreateCommentReq, currentUser responses.UserResponse) (bool, error)
 }

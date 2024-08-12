@@ -162,3 +162,28 @@ func (pc PostController) UnLike(ctx *gin.Context) {
 	result := pc.postService.UnLike(postID, *currentUser)
 	responses.APIResponse(ctx, result.StatusCode, result.Message, result.Data)
 }
+
+func(pc PostController) CreateComment(ctx *gin.Context) {
+	newComment := requests.CreateCommentReq{}
+	currentUser,_ := utils.GetUserProfile(ctx)
+
+	if err := ctx.ShouldBindJSON(&newComment); err != nil {
+		responses.APIResponse(ctx, 400, responses.StatusParamInvalid, nil)
+		return
+	}
+
+	result := pc.postService.CreateComment(&newComment, *currentUser)
+	responses.APIResponse(ctx, result.StatusCode, result.Message, result.Data)
+}
+
+func (pc PostController) GetComments(ctx *gin.Context){
+
+}
+
+func (pc PostController) EditComment(ctx *gin.Context){
+
+}
+
+func (pc PostController) DeleteComment(ctx *gin.Context){
+
+}
