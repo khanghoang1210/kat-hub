@@ -1,11 +1,24 @@
+import { cookies } from "next/headers";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import React, { useRef } from "react";
+import { useCookies } from "react-cookie";
 
 type TopbarProps = {};
 
 const Topbar: React.FC<TopbarProps> = () => {
   const svgRef = useRef<SVGSVGElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
+  const [cookies, setCookies, removeCookie] = useCookies(['token']);
+
+  const handleLogOut = () => {
+    removeCookie('token');
+
+   router.push("/auth");
+  };
+
+
 
   return (
     <nav className="relative bg-white-900 flex h-[70px] w-full items-center px-7 text-dark-gray-7">
@@ -65,16 +78,18 @@ const Topbar: React.FC<TopbarProps> = () => {
         />
       </div>
       <div className="relative mx-8 mr-36">
-        <button>
-          <p className="text-black-800 font-medium">Log out</p>
-          <Image
-            src={"assets/icons/user.svg"}
-            alt="Logo"
-            height={20}
-            width={20}
-            className="absolute  top-0.5 left-16"
-          />
-        </button>
+      {cookies.token && (
+          <button onClick={handleLogOut}>
+            <p className="text-black-800 font-medium">Log out</p>
+            <Image
+              src={"assets/icons/user.svg"}
+              alt="Logo"
+              height={20}
+              width={20}
+              className="absolute  top-0.5 left-16"
+            />
+          </button>
+        )}
       </div>
     </nav>
   );
