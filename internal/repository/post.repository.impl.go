@@ -212,3 +212,26 @@ func (p *PostRepositoryImpl) GetAllComment(postID int) ([]*responses.CommentResp
 	}
 	return result, nil
 }
+
+func (p *PostRepositoryImpl) UpdateComment(req *requests.UpdateCommentReq, user responses.UserResponse) (bool, error) {
+	comment := models.Comment{}
+	res := p.db.First(&comment, req.CommentID)
+	if res.Error != nil {
+
+		if res.RowsAffected == 0 {
+			return false, errors.New(responses.StatusResourceNotFound)
+		}
+
+		return false, res.Error
+	}
+	if comment.UserId != user.Id {
+		return false, errors.New(responses.StatusForbidden)
+	}
+	comment.Content = req.Content
+	result := p.db.Save(&comment)
+
+	if result.Error != nil {
+		return false, result.Error
+	}
+	return true, nil
+}

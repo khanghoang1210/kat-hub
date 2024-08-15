@@ -10,5 +10,6 @@ const (
 	StatusAuthorizeFail = "invalid username or password"
 	StatusNoData = "no data yet"
 	StatusInternalError = "server error"
-)
+	StatusForbidden = "not have permission"
 
+)

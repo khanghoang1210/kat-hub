@@ -188,7 +188,15 @@ func (pc PostController) GetCommentsByPostID(ctx *gin.Context){
 }
 
 func (pc PostController) EditComment(ctx *gin.Context){
+	updateComment := requests.UpdateCommentReq{}
+	currentUser,_ := utils.GetUserProfile(ctx)
 
+	if err := ctx.ShouldBindJSON(&updateComment); err != nil {
+		responses.APIResponse(ctx, 400, responses.StatusParamInvalid, nil)
+		return
+	}
+	result := pc.postService.UpdateComment(&updateComment, *currentUser)
+	responses.APIResponse(ctx, result.StatusCode, result.Message, result.Data)
 }
 
 func (pc PostController) DeleteComment(ctx *gin.Context){
