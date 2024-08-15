@@ -272,3 +272,28 @@ func (p *PostServiceImpl) UpdateComment(req *requests.UpdateCommentReq, currentU
 		Data:       result,
 	}
 }
+
+func(p *PostServiceImpl) DeleteComment(commentID int,currentUser responses.UserResponse) *responses.ResponseData {
+	result, err := p.postRepo.DeleteComment(commentID, currentUser)
+
+	if err != nil {
+		if err.Error() == responses.StatusResourceNotFound {
+			return &responses.ResponseData{
+				StatusCode: http.StatusNoContent,
+				Message:    err.Error(),
+				Data:       false,
+			}
+		}
+		return &responses.ResponseData{
+			StatusCode: http.StatusInternalServerError,
+			Message:    err.Error(),
+			Data:       false,
+		}
+	}
+
+	return &responses.ResponseData{
+		StatusCode: http.StatusOK,
+		Message:    responses.StatusSuccess,
+		Data:       result,
+	}
+}

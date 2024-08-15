@@ -200,5 +200,13 @@ func (pc PostController) EditComment(ctx *gin.Context){
 }
 
 func (pc PostController) DeleteComment(ctx *gin.Context){
+	commentID, errParse := strconv.Atoi(ctx.Param("id"))
+	currentUser,_ := utils.GetUserProfile(ctx)
+	if errParse != nil {
+		responses.APIResponse(ctx, 400, responses.StatusParamInvalid, nil)
+		return
+	}
 
+	result := pc.postService.DeleteComment(commentID, *currentUser)
+	responses.APIResponse(ctx, result.StatusCode, result.Message, result.Data)
 }

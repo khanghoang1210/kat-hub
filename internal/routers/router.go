@@ -38,6 +38,7 @@ func NewRouter(userController *controllers.UserController, ac *controllers.Accou
 	postRouter.POST("/comment/", middlewares.AuthenMiddleware, pc.CreateComment)
 	postRouter.GET("/comment/:id", pc.GetCommentsByPostID)
 	postRouter.PUT("/comment",middlewares.AuthenMiddleware, pc.EditComment)
+	postRouter.DELETE("/comment/:id",middlewares.AuthenMiddleware, pc.DeleteComment)
 
 	return r
 }

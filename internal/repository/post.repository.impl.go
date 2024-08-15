@@ -235,3 +235,12 @@ func (p *PostRepositoryImpl) UpdateComment(req *requests.UpdateCommentReq, user 
 	}
 	return true, nil
 }
+
+func (p *PostRepositoryImpl) DeleteComment(commentID int, user responses.UserResponse) (bool, error) {
+	res := p.db.Where("user_id", user.Id).Delete(&models.Comment{}, commentID)
+
+	if res.Error != nil {
+		return false, res.Error
+	}
+	return true, nil
+}

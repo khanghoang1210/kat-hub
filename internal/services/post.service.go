@@ -18,4 +18,5 @@ type PostService interface {
 	CreateComment(req *requests.CreateCommentReq, currentUser responses.UserResponse) *responses.ResponseData
 	GetCommentsByPostID(postID int) *responses.ResponseData
 	UpdateComment(req *requests.UpdateCommentReq, currentUser responses.UserResponse) *responses.ResponseData
+	DeleteComment(commentID int,currentUser responses.UserResponse) *responses.ResponseData
 }
