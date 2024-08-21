@@ -4,17 +4,20 @@ import (
 	"kathub/internal/controllers"
 	"kathub/internal/middlewares"
 
+	ws "kathub/internal/websocket"
+
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func NewRouter(userController *controllers.UserController, ac *controllers.AccountController, pc *controllers.PostController) *gin.Engine {
+	
 	r := gin.Default()
-
 
 	r.Use(middlewares.CORSMiddleware())
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	r.GET("/ws", ws.NewWs)
 	baseRouter := r.Group("/api/v1")
 	userRouter := baseRouter.Group("/users")
 	userRouter.GET("", middlewares.AuthenMiddleware, userController.GetAll)
