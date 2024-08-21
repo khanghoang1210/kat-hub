@@ -15,7 +15,7 @@ type User struct {
 	Gender    string
 	CreatedAt time.Time
 	UpdatedAt time.Time
-	Post      []Post `gorm:"foreignKey:UserId"`
+	Post      []Post    `gorm:"foreignKey:UserId"`
 	Likes     []Like    `gorm:"foreignKey:UserId"`
 	Comments  []Comment `gorm:"foreignKey:UserId"`
 }
