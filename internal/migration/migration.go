@@ -7,8 +7,14 @@ import (
 )
 
 func main() {
-	 database.DatabaseConnection()
-	 if err := database.DB.Debug().AutoMigrate(&models.User{}, &models.Post{}, &models.Like{}, &models.Comment{}, &models.Friend{}); err != nil {
-        fmt.Printf("failed to auto migrate: %v", err)
-    }
+	database.DatabaseConnection()
+	if err := database.DB.Debug().AutoMigrate(&models.User{},
+		&models.Post{},
+		&models.Like{},
+		&models.Comment{},
+		&models.Friend{},
+		&models.Request{},
+	); err != nil {
+		fmt.Printf("failed to auto migrate: %v", err)
+	}
 }
