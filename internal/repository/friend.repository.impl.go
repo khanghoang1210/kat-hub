@@ -126,24 +126,61 @@ func (f *FriendRepositoryImpl) DeleteRequest(id int) (bool, error) {
 // GetAll implements FriendRepository.
 func (f *FriendRepositoryImpl) GetAll(userID int) ([]responses.UserResponse, error) {
 	friends := []models.Friend{}
-	resp := f.db.Find(&friends)
+	resp := f.db.Find(&friends, userID)
 	if resp.Error != nil {
 		return nil, resp.Error
 	}
 
 	result := []responses.UserResponse{}
-	for _,v := range friends {
-		friend := responses.UserResponse {
-			Id: v.FriendId,
-			UserName: v.Friend.UserName,
-			FullName: v.Friend.FullName,
-			Email: v.Friend.Email,	
-			Title: v.Friend.Title,
+	for _, v := range friends {
+		friend := responses.UserResponse{
+			Id:        v.FriendId,
+			UserName:  v.Friend.UserName,
+			FullName:  v.Friend.FullName,
+			Email:     v.Friend.Email,
+			Title:     v.Friend.Title,
 			AvatarUrl: v.Friend.AvatarUrl,
 			CreatedAt: v.Friend.CreatedAt,
 		}
 
 		result = append(result, friend)
+	}
+	return result, nil
+}
+
+func (f *FriendRepositoryImpl) GetAllRequests(userID int) ([]responses.RequestRes, error) {
+	requests := []models.Request{}
+	resp := f.db.Find(&requests, userID)
+	if resp.Error != nil {
+		return nil, resp.Error
+	}
+	result := []responses.RequestRes{}
+	for _, v := range requests {
+		request := &responses.RequestRes{
+			Id:         int(v.Id),
+			SenderID:   int(v.SenderID),
+			ReceiverID: int(v.ReceiverID),
+			CreatedAt:  v.CreatedAt,
+		}
+
+		result = append(result, *request)
+	}
+	return result, nil
+}
+
+func (f *FriendRepositoryImpl) GetRequestByID(id int) (*responses.RequestRes, error) {
+	request := &models.Request{}
+	resp := f.db.First(&request, id)
+	if resp.Error != nil {
+		return nil, resp.Error
+	}
+
+	result := &responses.RequestRes{
+		Id:         int(request.Id),
+		SenderID:   int(request.SenderID),
+		ReceiverID: int(request.ReceiverID),
+		Status:     request.Status,
+		CreatedAt:  request.CreatedAt,
 	}
 	return result, nil
 }
